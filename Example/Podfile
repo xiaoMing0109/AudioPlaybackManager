@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'AudioPlaybackManager_Example' do
+  pod 'AudioPlaybackManager', :path => '../'
+
+  target 'AudioPlaybackManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
