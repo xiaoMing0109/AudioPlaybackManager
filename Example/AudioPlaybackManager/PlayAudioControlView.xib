@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Dosis-Regular.otf">
+            <string>Dosis-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PlayAudioControlView" customModule="AudioPlayManager_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="384" height="250"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ghz-Xq-vmb">
+                    <rect key="frame" x="50" y="4" width="284" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="3kq-J1-g1q"/>
+                    </constraints>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0do-4z-ah3">
+                    <rect key="frame" x="50" y="41" width="284" height="50"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VjQ-kz-gtZ">
+                            <rect key="frame" x="0.0" y="0.0" width="43" height="50"/>
+                            <fontDescription key="fontDescription" name="Dosis-Regular" family="Dosis" pointSize="14"/>
+                            <color key="textColor" red="0.20000000000000001" green="0.65098039215686276" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ghj-QS-seI" userLabel="Spacer">
+                            <rect key="frame" x="43" y="0.0" width="198" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01 : 40" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnP-8h-ejT">
+                            <rect key="frame" x="241" y="0.0" width="43" height="50"/>
+                            <fontDescription key="fontDescription" name="Dosis-Regular" family="Dosis" pointSize="14"/>
+                            <color key="textColor" red="0.45490196078431372" green="0.52156862745098043" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gp1-Gp-ly8">
+                    <rect key="frame" x="49" y="131" width="286" height="60"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omm-K5-aOt">
+                            <rect key="frame" x="0.0" y="13" width="34" height="34"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="meditation_player_backward"/>
+                            <state key="disabled" image="meditation_player_backward.disable"/>
+                            <connections>
+                                <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Nwk-D0-1FB"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="atT-0k-XrD" userLabel="Spacer">
+                            <rect key="frame" x="34" y="5" width="20" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="xCp-9W-dsH"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WFY-5R-XZS">
+                            <rect key="frame" x="54" y="13" width="34" height="34"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="meditation_player_previous"/>
+                            <state key="disabled" image="meditation_player_previous.disable"/>
+                            <connections>
+                                <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Exz-7N-4kh"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCE-2y-JJq" userLabel="Spacer">
+                            <rect key="frame" x="88" y="5" width="25" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="25" id="ugC-LL-L7q"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0np-wh-OQ7">
+                            <rect key="frame" x="113" y="0.0" width="60" height="60"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="meditation_player_play"/>
+                            <connections>
+                                <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="lZ0-dQ-Sc5"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VX4-L2-e4g" userLabel="Spacer">
+                            <rect key="frame" x="173" y="5" width="25" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="25" id="cbi-Ug-rDK"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqc-m2-6Ze">
+                            <rect key="frame" x="198" y="13" width="34" height="34"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="meditation_player_next"/>
+                            <state key="disabled" image="meditation_player_next.disable"/>
+                            <connections>
+                                <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="0b1-Tt-bhe"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9dM-6O-k3w" userLabel="Spacer">
+                            <rect key="frame" x="232" y="5" width="20" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="LsQ-UH-dWL"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cXz-ob-cam">
+                            <rect key="frame" x="252" y="13" width="34" height="34"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="meditation_player_forward"/>
+                            <state key="disabled" image="meditation_player_forward.disable"/>
+                            <connections>
+                                <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="lVU-Xl-7ji"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="l85-4O-nM6"/>
+                    </constraints>
+                </stackView>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="TRH-c6-rQY">
+                    <rect key="frame" x="50" y="226" width="284" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="gJ6-S4-XmL"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="TRH-c6-rQY" secondAttribute="bottom" id="8FH-sR-uF2"/>
+                <constraint firstItem="gp1-Gp-ly8" firstAttribute="top" secondItem="0do-4z-ah3" secondAttribute="bottom" constant="40" id="Bzw-HP-NYf"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="TRH-c6-rQY" secondAttribute="trailing" constant="50" id="ESe-mP-Hqz"/>
+                <constraint firstItem="ghz-Xq-vmb" firstAttribute="trailing" secondItem="0do-4z-ah3" secondAttribute="trailing" id="IOY-Rv-CS8"/>
+                <constraint firstItem="gp1-Gp-ly8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="IcY-vR-F1i"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="0do-4z-ah3" secondAttribute="trailing" constant="50" id="Ozx-Lp-U6z"/>
+                <constraint firstItem="0do-4z-ah3" firstAttribute="top" secondItem="ghz-Xq-vmb" secondAttribute="bottom" constant="5" id="QW9-Zk-3cV"/>
+                <constraint firstItem="TRH-c6-rQY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="50" id="Wpp-pm-Fv1"/>
+                <constraint firstItem="0do-4z-ah3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="50" id="brN-Sa-27b"/>
+                <constraint firstItem="ghz-Xq-vmb" firstAttribute="leading" secondItem="0do-4z-ah3" secondAttribute="leading" id="hsd-2E-aeX"/>
+                <constraint firstItem="TRH-c6-rQY" firstAttribute="top" secondItem="gp1-Gp-ly8" secondAttribute="bottom" constant="35" id="pKk-ou-aeZ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="backwardButton" destination="omm-K5-aOt" id="zsN-tj-oY7"/>
+                <outlet property="controlButtonsStackViewConstraintBottom" destination="pKk-ou-aeZ" id="MmS-3s-8gN"/>
+                <outlet property="controlButtonsStackViewConstraintTop" destination="Bzw-HP-NYf" id="cHm-7Y-bpU"/>
+                <outlet property="durationLabel" destination="VnP-8h-ejT" id="Oob-k2-yfh"/>
+                <outlet property="forwardButton" destination="cXz-ob-cam" id="2r4-6n-ZPE"/>
+                <outlet property="nextButton" destination="iqc-m2-6Ze" id="Mxq-kv-aNW"/>
+                <outlet property="playButton" destination="0np-wh-OQ7" id="vhL-7I-5O4"/>
+                <outlet property="playtimeLabel" destination="VjQ-kz-gtZ" id="l5c-h2-oZo"/>
+                <outlet property="previousButton" destination="WFY-5R-XZS" id="BPb-fc-5se"/>
+                <outlet property="progressBackgroundView" destination="ghz-Xq-vmb" id="4gq-Cl-j6u"/>
+                <outlet property="volumeStackView" destination="TRH-c6-rQY" id="hNT-mW-DVB"/>
+            </connections>
+            <point key="canvasLocation" x="115.94202898550725" y="-125.89285714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="meditation_player_backward" width="34" height="34"/>
+        <image name="meditation_player_backward.disable" width="34" height="34"/>
+        <image name="meditation_player_forward" width="34" height="34"/>
+        <image name="meditation_player_forward.disable" width="34" height="34"/>
+        <image name="meditation_player_next" width="34" height="34"/>
+        <image name="meditation_player_next.disable" width="34" height="34"/>
+        <image name="meditation_player_play" width="60" height="60"/>
+        <image name="meditation_player_previous" width="34" height="34"/>
+        <image name="meditation_player_previous.disable" width="34" height="34"/>
+    </resources>
+</document>
