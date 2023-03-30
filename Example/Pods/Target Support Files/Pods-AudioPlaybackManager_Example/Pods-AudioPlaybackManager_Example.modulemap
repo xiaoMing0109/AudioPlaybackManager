@@ -1,0 +1,6 @@
+framework module Pods_AudioPlaybackManager_Example {
+  umbrella header "Pods-AudioPlaybackManager_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

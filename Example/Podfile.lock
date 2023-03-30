@@ -1,0 +1,16 @@
+PODS:
+  - AudioPlaybackManager (0.1.0)
+
+DEPENDENCIES:
+  - AudioPlaybackManager (from `../`)
+
+EXTERNAL SOURCES:
+  AudioPlaybackManager:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AudioPlaybackManager: 1ac669585f4229c08141166754cd810c1681679c
+
+PODFILE CHECKSUM: a817b8a9ccfe10faa29748ed8a72abee6325e76d
+
+COCOAPODS: 1.11.3

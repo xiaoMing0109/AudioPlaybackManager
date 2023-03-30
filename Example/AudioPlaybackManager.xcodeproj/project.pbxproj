@@ -29,8 +29,8 @@
 
 /* Begin PBXFileReference section */
 		035F62A7D45E308D9599B6C5 /* Pods_AudioPlaybackManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioPlaybackManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		08A8248630433D6EEBC3D3AF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		25C155F588B5116F4657DDF4 /* AudioPlaybackManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = AudioPlaybackManager.podspec; path = ../AudioPlaybackManager.podspec; sourceTree = "<group>"; };
+		08A8248630433D6EEBC3D3AF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		25C155F588B5116F4657DDF4 /* AudioPlaybackManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AudioPlaybackManager.podspec; path = ../AudioPlaybackManager.podspec; sourceTree = "<group>"; };
 		470614238E00E7F90253582D /* Pods-AudioPlaybackManager_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Example.debug.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Example/Pods-AudioPlaybackManager_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4E0C325598582C972D19CE7E /* Pods-AudioPlaybackManager_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Tests.release.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Tests/Pods-AudioPlaybackManager_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AudioPlaybackManager_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlaybackManager_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,7 +45,7 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		8FE7D8DBD30C6E573DA934BD /* Pods_AudioPlaybackManager_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioPlaybackManager_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Tests/Pods-AudioPlaybackManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		B6C4FA1B44BF60FDCC0823C5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		B6C4FA1B44BF60FDCC0823C5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		E7EE6BB3364FBE6D4EF88933 /* Pods-AudioPlaybackManager_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Example.release.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Example/Pods-AudioPlaybackManager_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,7 +77,6 @@
 				92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */,
 				4E0C325598582C972D19CE7E /* Pods-AudioPlaybackManager_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -213,10 +212,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = KX2CL79DNK;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = KX2CL79DNK;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -227,6 +228,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -478,13 +480,15 @@
 			baseConfigurationReference = 470614238E00E7F90253582D /* Pods-AudioPlaybackManager_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KX2CL79DNK;
 				INFOPLIST_FILE = AudioPlaybackManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -493,13 +497,15 @@
 			baseConfigurationReference = E7EE6BB3364FBE6D4EF88933 /* Pods-AudioPlaybackManager_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KX2CL79DNK;
 				INFOPLIST_FILE = AudioPlaybackManager/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -507,6 +513,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = KX2CL79DNK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -516,11 +523,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlaybackManager_Example.app/AudioPlaybackManager_Example";
 			};
 			name = Debug;
@@ -529,16 +537,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4E0C325598582C972D19CE7E /* Pods-AudioPlaybackManager_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = KX2CL79DNK;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlaybackManager_Example.app/AudioPlaybackManager_Example";
 			};
 			name = Release;
