@@ -18,5 +18,20 @@
   "platforms": {
     "ios": "10.0"
   },
-  "source_files": "AudioPlaybackManager/Classes/**/*"
+  "source_files": "AudioPlaybackManager/Classes/**/*",
+  "requires_arc": true,
+  "swift_versions": "5.0",
+  "public_header_files": "Pod/Classes/**/*.h",
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "AVFoundation",
+    "MediaPlayer"
+  ],
+  "dependencies": {
+    "VIMediaCache": [
+      "~> 0.4"
+    ]
+  },
+  "swift_version": "5.0"
 }

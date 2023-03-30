@@ -32,11 +32,14 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'AudioPlaybackManager/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'AudioPlaybackManager' => ['AudioPlaybackManager/Assets/*.png']
-  # }
+  s.ios.deployment_target = '10.0'
+  s.requires_arc          = true
+  s.swift_version         = '5.0'
+  
+  s.source_files = 'AudioPlaybackManager/Classes/**/*'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.public_header_files = 'Pod/Classes/**/*.h'
+  s.frameworks = 'UIKit', 'Foundation', 'AVFoundation', 'MediaPlayer'
+  
+  s.dependency 'VIMediaCache', '~> 0.4'
 end

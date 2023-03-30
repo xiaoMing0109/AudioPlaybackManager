@@ -30,7 +30,7 @@
 /* Begin PBXFileReference section */
 		035F62A7D45E308D9599B6C5 /* Pods_AudioPlaybackManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioPlaybackManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08A8248630433D6EEBC3D3AF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		25C155F588B5116F4657DDF4 /* AudioPlaybackManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AudioPlaybackManager.podspec; path = ../AudioPlaybackManager.podspec; sourceTree = "<group>"; };
+		25C155F588B5116F4657DDF4 /* AudioPlaybackManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AudioPlaybackManager.podspec; path = ../AudioPlaybackManager.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		470614238E00E7F90253582D /* Pods-AudioPlaybackManager_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Example.debug.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Example/Pods-AudioPlaybackManager_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4E0C325598582C972D19CE7E /* Pods-AudioPlaybackManager_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Tests.release.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Tests/Pods-AudioPlaybackManager_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AudioPlaybackManager_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlaybackManager_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -294,10 +294,22 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AudioPlaybackManager_Example/Pods-AudioPlaybackManager_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AudioPlaybackManager/AudioPlaybackManager.framework",
+				"${BUILT_PRODUCTS_DIR}/QQCorner/QQCorner.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/VIMediaCache/VIMediaCache.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AudioPlaybackManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QQCorner.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VIMediaCache.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

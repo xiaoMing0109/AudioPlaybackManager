@@ -2,12 +2,17 @@ use_frameworks!
 
 platform :ios, '10.0'
 
+source 'https://github.com/CocoaPods/Specs.git'
+
 target 'AudioPlaybackManager_Example' do
   pod 'AudioPlaybackManager', :path => '../'
 
+  pod 'SnapKit'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'QQCorner'
+  
   target 'AudioPlaybackManager_Tests' do
     inherit! :search_paths
-
-    
   end
 end

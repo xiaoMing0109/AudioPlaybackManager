@@ -1,16 +1,46 @@
 PODS:
-  - AudioPlaybackManager (0.1.0)
+  - AudioPlaybackManager (0.1.0):
+    - VIMediaCache (~> 0.4)
+  - QQCorner (2.0.3)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
+  - SnapKit (5.6.0)
+  - VIMediaCache (0.4)
 
 DEPENDENCIES:
   - AudioPlaybackManager (from `../`)
+  - QQCorner
+  - RxCocoa
+  - RxSwift
+  - SnapKit
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - QQCorner
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SnapKit
+  trunk:
+    - VIMediaCache
 
 EXTERNAL SOURCES:
   AudioPlaybackManager:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AudioPlaybackManager: 1ac669585f4229c08141166754cd810c1681679c
+  AudioPlaybackManager: fd35be49db98a9397b059a2e58bf0760d18eb0b7
+  QQCorner: 3d1028fb3550af863075e0d4dba040cab6fbe25d
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  VIMediaCache: aa650f82cb114c68a343beb4e67416cf5eb2f3a2
 
-PODFILE CHECKSUM: a817b8a9ccfe10faa29748ed8a72abee6325e76d
+PODFILE CHECKSUM: f0dc2a8b4c023d23b2e7dfba1ba85e004d1d58e4
 
 COCOAPODS: 1.11.3
