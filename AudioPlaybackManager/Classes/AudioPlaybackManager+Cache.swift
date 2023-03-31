@@ -20,12 +20,12 @@ extension AudioPlaybackManager {
     ///
     /// Default is `false`.
     @objc
-    public var cacheEnabled: Bool {
+    open var cacheEnabled: Bool {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.cacheEnabledKey) as? Bool ?? false
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.cacheEnabledKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociatedKeys.cacheEnabledKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     

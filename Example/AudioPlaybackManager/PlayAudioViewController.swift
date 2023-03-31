@@ -13,16 +13,17 @@ import RxSwift
 class PlayAudioViewController: UIViewController {
     
 // MARK: Public Property
-    let viewModel: PlayAudioViewModel
+    
     
 // MARK: Private Property
+    private let viewModel: PlayAudioViewModel
     private let defaultPlayIndex: Int
     
     private let disposeBag = DisposeBag()
     
 // MARK: ============== Life Cycle ==============
-    init(viewModel: PlayAudioViewModel, defaultPlayIndex: Int) {
-        self.viewModel = viewModel
+    init(audioURLs: [URL], defaultPlayIndex: Int) {
+        self.viewModel = PlayAudioViewModel(audioURLs: audioURLs)
         self.defaultPlayIndex = defaultPlayIndex
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,48 +36,20 @@ class PlayAudioViewController: UIViewController {
         super.viewDidLoad()
         setupSubviews()
         makeConstraints()
-        AudioPlaybackManager.shared.activeAllRemoteCommands(true)
+        addSubscribe()
         
-        AudioPlaybackManager.shared.activeSession(true)
+        // Remote commands.
+        AudioPlaybackManager.shared.activatePlaybackCommands(true)
+        AudioPlaybackManager.shared.activatePreviousTrackCommand(true)
+        AudioPlaybackManager.shared.activateNextTrackCommand(true)
+        AudioPlaybackManager.shared.activateSeekBackwardCommand(true)
+        AudioPlaybackManager.shared.activateSeekForwardCommand(true)
+        AudioPlaybackManager.shared.activateChangePlaybackPositionCommand(true)
+        
+        // 后台 + 设备静音模式 可播放
+        AudioPlaybackManager.shared.setActiveSession(true)
         
         viewModel.playAudio(at: defaultPlayIndex)
-        
-        viewModel.playIndex.subscribe(onNext: { [unowned self] index in
-            guard let index = index else { return }
-            
-            let item = viewModel.items.value[index]
-            if let url = item.artworkURL {
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url)
-                    let image = UIImage(data: data ?? Data())
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.imageView.image = image
-                    }
-                }
-            } else {
-                imageView.image = nil
-            }
-        })
-        .disposed(by: disposeBag)
-        
-        viewModel.playStatus.subscribe(onNext: { [unowned self] status in
-            guard let status = status else { return }
-            
-            switch status {
-            case .playCompleted:
-                if let index = viewModel.fetchWillPlayNextIndex() {
-                    viewModel.switchAudio(at: index)
-                } else {
-                    backAction()
-                }
-            case .error:
-                // 加载失败时弹错误弹窗, 关闭后允许手动再次播放。
-                showErrorAlert()
-            default: break
-            }
-        })
-        .disposed(by: disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -109,7 +82,8 @@ class PlayAudioViewController: UIViewController {
     
     deinit {
         viewModel.stopPlay()
-        AudioPlaybackManager.shared.activeSession(false)
+        AudioPlaybackManager.shared.deactivateAllRemoteCommands()
+        AudioPlaybackManager.shared.setActiveSession(false)
     }
     
 // MARK: Setup Subviews
@@ -117,6 +91,7 @@ class PlayAudioViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(imageView)
+        view.addSubview(titleLabel)
         view.addSubview(playControlView)
     }
     
@@ -125,6 +100,16 @@ class PlayAudioViewController: UIViewController {
         view.contentMode = .scaleAspectFit
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
+        return view
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let view = UILabel()
+        view.text = ""
+        view.textColor = .systemPink
+        view.textAlignment = .center
+        view.font = .systemFont(ofSize: 18)
+        view.numberOfLines = 0
         return view
     }()
     
@@ -137,9 +122,14 @@ class PlayAudioViewController: UIViewController {
 // MARK: Make Constraints
     private func makeConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(20)
+            make.top.equalTo(100)
             make.centerX.equalToSuperview()
             make.size.equalTo(CGSize(width: 300, height: 300))
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(imageView.snp.bottom).offset(30)
         }
         
         playControlView.snp.makeConstraints { make in
@@ -157,10 +147,56 @@ class PlayAudioViewController: UIViewController {
 // MARK: ============== Private ==============
 extension PlayAudioViewController {
     
-    private func showErrorAlert() {
-        let alert = UIAlertController(title: "Error", message: "加载音频失败, 请检查网络后重试", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
-        present(alert, animated: true)
+    private func addSubscribe() {
+        viewModel.playIndex.subscribe(onNext: { [unowned self] index in
+            guard let index = index else { return }
+            
+            let item = viewModel.items.value[index]
+            
+            if let image = item.artworkImage {
+                imageView.image = image
+            } else if let url = item.artworkURL {
+                if url.isFileURL {
+                    var path: String {
+                        if #available(iOS 16.0, *) {
+                            return url.path()
+                        } else {
+                            return url.path
+                        }
+                    }
+                    imageView.image = UIImage(contentsOfFile: path)
+                } else {
+                    DispatchQueue.global().async {
+                        let data = try? Data(contentsOf: url)
+                        let image = UIImage(data: data ?? Data())
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            self.imageView.image = image
+                        }
+                    }
+                }
+                
+                titleLabel.text = item.title
+            } else {
+                imageView.image = nil
+            }
+        })
+        .disposed(by: disposeBag)
+        
+        viewModel.playStatus.subscribe(onNext: { [unowned self] status in
+            guard let status = status else { return }
+            
+            switch status {
+            case .playCompleted:
+                if let index = viewModel.fetchWillPlayNextIndex() {
+                    viewModel.switchAudio(at: index)
+                } else {
+                    backAction()
+                }
+            default: break
+            }
+        })
+        .disposed(by: disposeBag)
     }
 }
 

@@ -21,12 +21,12 @@ extension AudioPlaybackManager {
     ///
     /// Default rewind rate is `-2.0`.
     @objc
-    public var remoteControlRewindRate: Float {
+    open var remoteControlRewindRate: Float {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.rewindRateKey) as? Float ?? -2.0
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.rewindRateKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociatedKeys.rewindRateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -34,12 +34,12 @@ extension AudioPlaybackManager {
     ///
     /// Default fast forword rate is `2.0`.
     @objc
-    public var remoteControlFastForwardRate: Float {
+    open var remoteControlFastForwardRate: Float {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.fastForwardRateKey) as? Float ?? 2.0
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.fastForwardRateKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociatedKeys.fastForwardRateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -63,19 +63,7 @@ extension AudioPlaybackManager {
 extension AudioPlaybackManager {
     
     @objc
-    public func activeAllRemoteCommands(_ enabled: Bool) {
-        activatePlaybackCommands(enabled)
-        activeNextTrackCommand(enabled)
-        activePreviousTrackCommand(enabled)
-        activeSkipForwardCommand(enabled)
-        activeSkipBackwardCommand(enabled)
-        activeSeekForwardCommand(enabled)
-        activeSeekBackwardCommand(enabled)
-        activeChangePlaybackPositionCommand(enabled)
-    }
-    
-    @objc
-    public func activatePlaybackCommands(_ enabled: Bool) {
+    open func activatePlaybackCommands(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.playCommand.addTarget(self, action: #selector(handlePlayCommandEvent(_:)))
             remoteCommandCenter.pauseCommand.addTarget(self, action: #selector(handlePauseCommandEvent(_:)))
@@ -95,7 +83,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeNextTrackCommand(_ enabled: Bool) {
+    open func activateNextTrackCommand(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.nextTrackCommand.addTarget(self, action: #selector(handleNextTrackCommandEvent(_:)))
         } else {
@@ -106,7 +94,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activePreviousTrackCommand(_ enabled: Bool) {
+    open func activatePreviousTrackCommand(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.previousTrackCommand.addTarget(self, action: #selector(handlePreviousTrackCommandEvent(event:)))
         } else {
@@ -117,7 +105,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeSkipForwardCommand(_ enabled: Bool, interval: Int = 15) {
+    open func activateSkipForwardCommand(_ enabled: Bool, interval: Int = 0) {
         if enabled {
             remoteCommandCenter.skipForwardCommand.preferredIntervals = [NSNumber(value: interval)]
             remoteCommandCenter.skipForwardCommand.addTarget(self, action: #selector(handleSkipForwardCommandEvent(event:)))
@@ -129,7 +117,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeSkipBackwardCommand(_ enabled: Bool, interval: Int = 15) {
+    open func activateSkipBackwardCommand(_ enabled: Bool, interval: Int = 0) {
         if enabled {
             remoteCommandCenter.skipBackwardCommand.preferredIntervals = [NSNumber(value: interval)]
             remoteCommandCenter.skipBackwardCommand.addTarget(self, action: #selector(handleSkipBackwardCommandEvent(event:)))
@@ -141,7 +129,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeSeekForwardCommand(_ enabled: Bool) {
+    open func activateSeekForwardCommand(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.seekForwardCommand.addTarget(self, action: #selector(handleSeekForwardCommandEvent(event:)))
         } else {
@@ -152,7 +140,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeSeekBackwardCommand(_ enabled: Bool) {
+    open func activateSeekBackwardCommand(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.seekBackwardCommand.addTarget(self, action: #selector(handleSeekBackwardCommandEvent(event:)))
         } else {
@@ -163,7 +151,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func activeChangePlaybackPositionCommand(_ enabled: Bool) {
+    open func activateChangePlaybackPositionCommand(_ enabled: Bool) {
         if enabled {
             remoteCommandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(handleChangePlaybackPositionCommandEvent(event:)))
         } else {
@@ -171,6 +159,18 @@ extension AudioPlaybackManager {
         }
         
         remoteCommandCenter.changePlaybackPositionCommand.isEnabled = enabled
+    }
+    
+    @objc
+    open func deactivateAllRemoteCommands() {
+        activatePlaybackCommands(false)
+        activateNextTrackCommand(false)
+        activatePreviousTrackCommand(false)
+        activateSkipForwardCommand(false)
+        activateSkipBackwardCommand(false)
+        activateSeekForwardCommand(false)
+        activateSeekBackwardCommand(false)
+        activateChangePlaybackPositionCommand(false)
     }
 }
 

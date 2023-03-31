@@ -21,6 +21,10 @@
 		BFD4EA4229D58096000182BC /* PlayAudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */; };
 		BFD4EA4329D58096000182BC /* PlayAudioControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3D29D58096000182BC /* PlayAudioControlView.swift */; };
 		BFD4EA4429D58096000182BC /* PlayAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */; };
+		BFD4EA4A29D68F2F000182BC /* Song 1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4629D68F2F000182BC /* Song 1.m4a */; };
+		BFD4EA4B29D68F2F000182BC /* Song 2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4729D68F2F000182BC /* Song 2.m4a */; };
+		BFD4EA4D29D68F2F000182BC /* artwork.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4929D68F2F000182BC /* artwork.jpg */; };
+		BFFB6ADF29D6F5440060D8D0 /* 暗里着迷.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BFFB6ADE29D6F5440060D8D0 /* 暗里着迷.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +62,10 @@
 		BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewModel.swift; sourceTree = "<group>"; };
 		BFD4EA3D29D58096000182BC /* PlayAudioControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioControlView.swift; sourceTree = "<group>"; };
 		BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewController.swift; sourceTree = "<group>"; };
+		BFD4EA4629D68F2F000182BC /* Song 1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Song 1.m4a"; sourceTree = "<group>"; };
+		BFD4EA4729D68F2F000182BC /* Song 2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Song 2.m4a"; sourceTree = "<group>"; };
+		BFD4EA4929D68F2F000182BC /* artwork.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = artwork.jpg; sourceTree = "<group>"; };
+		BFFB6ADE29D6F5440060D8D0 /* 暗里着迷.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "暗里着迷.m4a"; sourceTree = "<group>"; };
 		E7EE6BB3364FBE6D4EF88933 /* Pods-AudioPlaybackManager_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Example.release.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Example/Pods-AudioPlaybackManager_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +124,7 @@
 		607FACD21AFB9204008FA782 /* Example for AudioPlaybackManager */ = {
 			isa = PBXGroup;
 			children = (
+				BFD4EA4529D68F2F000182BC /* Resources */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */,
@@ -175,6 +184,17 @@
 				8FE7D8DBD30C6E573DA934BD /* Pods_AudioPlaybackManager_Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BFD4EA4529D68F2F000182BC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BFD4EA4629D68F2F000182BC /* Song 1.m4a */,
+				BFD4EA4729D68F2F000182BC /* Song 2.m4a */,
+				BFFB6ADE29D6F5440060D8D0 /* 暗里着迷.m4a */,
+				BFD4EA4929D68F2F000182BC /* artwork.jpg */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,8 +288,12 @@
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				BFD4EA3F29D58096000182BC /* PlayAudioControlView.xib in Resources */,
+				BFFB6ADF29D6F5440060D8D0 /* 暗里着迷.m4a in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				BFD4EA4D29D68F2F000182BC /* artwork.jpg in Resources */,
+				BFD4EA4B29D68F2F000182BC /* Song 2.m4a in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				BFD4EA4A29D68F2F000182BC /* Song 1.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

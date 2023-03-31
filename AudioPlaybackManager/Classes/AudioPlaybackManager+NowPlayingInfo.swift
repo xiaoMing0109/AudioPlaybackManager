@@ -12,6 +12,7 @@ extension AudioPlaybackManager {
     private struct AssociatedKeys {
         static var nowPlayingInfoCenterKey: Void?
         static var allowSetNowPlayingInfoKey: Void?
+        static var resizedImageSizeKey: Void?
     }
     
     // MARK: Public Properties
@@ -20,14 +21,28 @@ extension AudioPlaybackManager {
     ///
     /// Default is `true`.
     @objc
-    public var allowSetNowPlayingInfo: Bool {
+    open var allowSetNowPlayingInfo: Bool {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey) as? Bool ?? true
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+    
+    /// Set the artwork size, recommended ratio is 1:1.
+    ///
+    /// Default is { 640, 640 }.
+    @objc
+    open var artworkImageSize: CGSize {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.resizedImageSizeKey) as? CGSize ?? CGSize(width: 640, height: 640)
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.resizedImageSizeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
     
     // MARK: Private Properties
     
@@ -45,11 +60,6 @@ extension AudioPlaybackManager {
 
 extension AudioPlaybackManager {
     
-    private func acquireMetadataItem(from metadataItems: [AVMetadataItem], withKey key: Any?, keySpace: AVMetadataKeySpace? = .common) -> (NSCopying & NSObjectProtocol)? {
-        let value = AVMetadataItem.metadataItems(from: metadataItems, withKey: key, keySpace: keySpace).first?.value
-        return value
-    }
-    
     internal func setNowPlayingInfo() {
         guard allowSetNowPlayingInfo,
               let audio = audio,
@@ -65,8 +75,8 @@ extension AudioPlaybackManager {
             let asset = item.asset
             
             let titleKey = AVMetadataKey.commonKeyTitle
-            let albumNameKey = AVMetadataKey.commonKeyTitle
-            let artistKey = AVMetadataKey.commonKeyTitle
+            let albumNameKey = AVMetadataKey.commonKeyAlbumName
+            let artistKey = AVMetadataKey.commonKeyArtist
             
             if #available(iOS 15.0, *) {
                 asset.loadMetadata(for: .iTunesMetadata) { [weak self] metadataItems, error in
@@ -130,10 +140,9 @@ extension AudioPlaybackManager {
                         var artwork: MPMediaItemArtwork? {
                             if let artworkData = self.acquireMetadataItem(from: metadataItems, withKey: artworkKey) as? Data,
                                let image = UIImage(data: artworkData) {
-                                let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                    return image
+                                return MPMediaItemArtwork(boundsSize: self.artworkImageSize) { size in
+                                    return image.resize(withSize: size)
                                 }
-                                return artwork
                             } else {
                                 return nil
                             }
@@ -152,10 +161,9 @@ extension AudioPlaybackManager {
                     var artwork: MPMediaItemArtwork? {
                         if let artworkData = self.acquireMetadataItem(from: metadataItems, withKey: artworkKey) as? Data,
                            let image = UIImage(data: artworkData) {
-                            let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                return image
+                            return MPMediaItemArtwork(boundsSize: self.artworkImageSize) { size in
+                                return image.resize(withSize: size)
                             }
-                            return artwork
                         } else {
                             return nil
                         }
@@ -169,21 +177,26 @@ extension AudioPlaybackManager {
             }
         } else {
             if let image = audio.artworkImage {
-                let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in
-                    return image
+                let artwork = MPMediaItemArtwork(boundsSize: artworkImageSize) { size in
+                    return image.resize(withSize: size)
                 }
                 nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
                 
                 nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
             } else if let url = audio.artworkURL {
                 if url.isFileURL {
-                    let path = url.absoluteString
+                    var path: String {
+                        if #available(iOS 16.0, *) {
+                            return url.path()
+                        } else {
+                            return url.path
+                        }
+                    }
                     var artwork: MPMediaItemArtwork? {
                         if let image = UIImage(contentsOfFile: path) {
-                            let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                return image
+                            return MPMediaItemArtwork(boundsSize: artworkImageSize) { size in
+                                return image.resize(withSize: size)
                             }
-                            return artwork
                         } else {
                             return nil
                         }
@@ -196,10 +209,9 @@ extension AudioPlaybackManager {
                         var artwork: MPMediaItemArtwork? {
                             if let data = try? Data(contentsOf: url, options: .mappedIfSafe),
                                let image = UIImage(data: data) {
-                                let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                    return image
+                                return MPMediaItemArtwork(boundsSize: self.artworkImageSize) { size in
+                                    return image.resize(withSize: size)
                                 }
-                                return artwork
                             } else {
                                 return nil
                             }
@@ -217,6 +229,11 @@ extension AudioPlaybackManager {
                 nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
             }
         }
+    }
+    
+    private func acquireMetadataItem(from metadataItems: [AVMetadataItem], withKey key: Any?, keySpace: AVMetadataKeySpace? = .common) -> (NSCopying & NSObjectProtocol)? {
+        let value = AVMetadataItem.metadataItems(from: metadataItems, withKey: key, keySpace: keySpace).first?.value
+        return value
     }
     
     internal func updatePlaybackMetadata() {
@@ -238,5 +255,62 @@ extension AudioPlaybackManager {
         nowPlayingInfo[MPNowPlayingInfoPropertyDefaultPlaybackRate] = rate
         
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+    }
+}
+
+// MARK: - UIImage + Resize
+
+fileprivate extension UIImage {
+
+    func resize(withSize size: CGSize, contentMode: UIView.ContentMode = .scaleAspectFill) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        let image = renderer.image { _ in
+            let drawRect = cgRectFit(
+                in: CGRect(origin: .zero, size: size),
+                size: self.size,
+                contentMode: contentMode
+            )
+            draw(in: drawRect)
+        }
+        return image
+    }
+
+    private func cgRectFit(in rect: CGRect, size: CGSize, contentMode: UIView.ContentMode) -> CGRect {
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        var fitRect: CGRect = .zero
+        switch contentMode {
+        case .scaleAspectFit, .scaleAspectFill:
+            if rect.width < 0.01 || rect.height < 0.01 ||
+               size.width < 0.01 || size.height < 0.01 {
+                fitRect.origin = center
+            } else {
+                let scale: CGFloat
+                if contentMode == .scaleAspectFit {
+                    if size.width / size.height < rect.size.width / rect.size.height {
+                        scale = rect.size.height / size.height
+                    } else {
+                        scale = rect.size.width / size.width
+                    }
+                } else {
+                    if size.width / size.height < rect.size.width / rect.size.height {
+                        scale = rect.size.width / size.width
+                    } else {
+                        scale = rect.size.height / size.height
+                    }
+                }
+                fitRect.size.width = size.width * scale
+                fitRect.size.height = size.height * scale
+                fitRect.origin = CGPoint(
+                    x: center.x - rect.width * 0.5,
+                    y: center.y - rect.height * 0.5
+                )
+            }
+        default:
+            fitRect = rect
+        }
+        return fitRect
     }
 }

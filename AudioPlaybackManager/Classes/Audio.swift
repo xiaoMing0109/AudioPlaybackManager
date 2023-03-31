@@ -7,30 +7,30 @@
 import Foundation
 
 @objcMembers
-public class Audio: NSObject {
+open class Audio: NSObject {
     
     /// Audio url.
-    public var audioURL: URL
+    open var audioURL: URL
     
     /// -------------- `MPNowPlayingInfoCenter` --------------
     
     /// Set `nowPlayingInfo` using audio metadata.
     ///
-    /// Default is `true`.
-    public var useAudioMetadata: Bool = true
+    /// Default is `false`.
+    open var useAudioMetadata: Bool = false
     
-    /// If `useAudioMetadata` is set to false, then you can set it through the following properties.
+    // Note: If `useAudioMetadata` is set to false, then you can set it through the following properties.
     
     /// Audio name.
-    public var title: String?
+    open var title: String?
     /// Album name.
-    public var albumName: String?
+    open var albumName: String?
     /// Artist.
-    public var artist: String?
+    open var artist: String?
     
     /// Artwork.
-    public var artworkImage: UIImage?
-    public var artworkURL: URL?
+    open var artworkImage: UIImage?
+    open var artworkURL: URL?
     
     public init(audioURL: URL) {
         self.audioURL = audioURL

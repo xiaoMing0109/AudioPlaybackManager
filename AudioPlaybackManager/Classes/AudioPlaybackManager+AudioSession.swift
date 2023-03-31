@@ -19,7 +19,7 @@ extension AudioPlaybackManager {
     ///
     /// - Note: It is recommended to turn it on before starting to play, and turn it off when you don't need to play at all.
     @objc
-    public func activeSession(_ enabled: Bool) {
+    open func setActiveSession(_ enabled: Bool) {
         do {
             let session = AVAudioSession.sharedInstance()
             try session.setCategory(.playback, mode: .default)

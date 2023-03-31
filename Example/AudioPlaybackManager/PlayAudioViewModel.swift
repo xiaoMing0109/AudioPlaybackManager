@@ -46,50 +46,9 @@ class PlayAudioViewModel {
     private var isForcePause = false
     
 // MARK: ============== Life Cycle ==============
-    init() {
-        initializeItemsData()
+    init(audioURLs: [URL]) {
+        initializeItemsData(with: audioURLs)
         addNotiObserver()
-    }
-    
-    private func initializeItemsData() {
-        guard let enumerator = FileManager.default.enumerator(at: Bundle.main.bundleURL, includingPropertiesForKeys: nil, options: [], errorHandler: nil) else {
-            return
-        }
-        var items: [Audio] = enumerator.compactMap { element in
-            guard let url = element as? URL, url.pathExtension == "m4a" else {
-                return nil
-            }
-            
-            var audio = Audio(audioURL: url)
-            audio.albumName = "专辑名称"
-            audio.artist = "作者"
-            audio.title = url.lastPathComponent
-            if let path = Bundle.main.path(forResource: "artwork", ofType: "jpg") {
-                audio.artworkURL = URL(string: path)
-            }
-            return audio
-        }
-        
-        let onlinePaths = [
-            "https://tyst.migu.cn/public/ringmaker01/n15/2016/07/2016%E5%B9%B407%E6%9C%8818%E6%97%A515%E7%82%B955%E5%88%86%E7%B4%A7%E6%80%A5%E5%86%85%E5%AE%B9%E5%87%86%E5%85%A5SONY406%E9%A6%96/%E6%AD%8C%E6%9B%B2%E4%B8%8B%E8%BD%BD/MP3_128_16_Stero/%E6%88%91%E7%88%B1%E8%BF%87%E4%BD%A0-Eric%20%E5%91%A8%E5%85%B4%E5%93%B2.mp3",
-            "https://m801.music.126.net/20230319210223/d966542b15ce82527cd207e3a6532f6b/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/23382221099/30f1/8bd8/a054/fdd3ec2af8a78a3e8225aec7d6c131f0.mp3",
-            "https://m804.music.126.net/20230319210337/1347b6d85489bd7902e5422219b64a66/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096410131/63dd/2e55/78b2/45827f3a78775ad8e9ae256e28adfa7a.mp3?_authSecret=00000186f9e0fd401cda0aaba0c291a9",
-            "https://m804.music.126.net/20230319210707/c7917e318c90c91124cd23eeeb84ab36/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096523020/ebf6/daf7/f9f6/8e622c75c825823b8eba4cf67830527b.mp3?_authSecret=00000186f9e433c718690aaba60f167c"
-        ]
-        for path in onlinePaths {
-            guard let url = URL(string: path) else {
-                continue
-            }
-            var audio = Audio(audioURL: url)
-            audio.albumName = "专辑名称"
-            audio.artist = "作者"
-            audio.title = url.lastPathComponent
-            if let path = Bundle.main.path(forResource: "artwork", ofType: "jpg") {
-                audio.artworkURL = URL(string: path)
-            }
-            items.append(audio)
-        }
-        self.items.accept(items)
     }
     
     deinit {
@@ -99,6 +58,21 @@ class PlayAudioViewModel {
 
 // MARK: ============== Private ==============
 extension PlayAudioViewModel {
+    
+    private func initializeItemsData(with audioURLs: [URL]) {
+        let items = audioURLs.map { url in
+            let audio = Audio(audioURL: url)
+            audio.useAudioMetadata = false
+            audio.albumName = "专辑名称"
+            audio.artist = "作者"
+            audio.title = url.lastPathComponent
+            if let path = Bundle.main.path(forResource: "artwork", ofType: "jpg") {
+                audio.artworkURL = URL(fileURLWithPath: path)
+            }
+            return audio
+        }
+        self.items.accept(items)
+    }
     
     private func addNotiObserver() {
         let userInfoKeys = AudioPlaybackManager.NotificationUserInfoKeys.self

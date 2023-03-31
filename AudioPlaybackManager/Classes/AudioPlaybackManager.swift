@@ -8,7 +8,7 @@ import UIKit
 import MediaPlayer
 
 @objc
-public class AudioPlaybackManager: NSObject {
+open class AudioPlaybackManager: NSObject {
     
     /// An enumeration of possible playback status.
     @objc
@@ -16,16 +16,17 @@ public class AudioPlaybackManager: NSObject {
         case prepare, playing, paused, stop, playCompleted, error
     }
     
-    // MARK: Public Properties
-    
+    /// The single instance of `AudioPlaybackManager`.
     @objc
     public static let shared = AudioPlaybackManager()
+    
+    // MARK: Public Properties
     
     /// If true, auto play when item status is `readyToPlay`,
     /// otherwise, you can call `play()` when received noti
     /// `readyToPlay`.
     @objc
-    public var autoPlayWhenItemReady = false
+    open var autoPlayWhenItemReady = false
     
     /// If the playback is forcibly interrupted during audio playback,
     /// whether to continue playing automatically after the interruption ends.
@@ -46,16 +47,16 @@ public class AudioPlaybackManager: NSObject {
     ///  the system app will generally send a corresponding notification when the audio session ends,
     /// and some third apps may not take the initiative to notify.
     @objc
-    public var shouldResumeWhenInterruptEnded = true
+    open var shouldResumeWhenInterruptEnded = true
     
     @objc
-    public var isMuted: Bool {
+    open var isMuted: Bool {
         get { return player.isMuted }
         set { player.isMuted = newValue }
     }
     
     @objc
-    public var volume: Float {
+    open var volume: Float {
         get { return player.volume }
         set { player.volume = newValue }
     }
@@ -124,8 +125,8 @@ public class AudioPlaybackManager: NSObject {
         }
     }
     
-    /// Audio.
-    internal var audio: Audio?
+    /// Record `setupItem(_:beginTime:)` item.
+    internal private(set) var audio: Audio?
     
     // MARK: Private Properties
     
@@ -137,7 +138,7 @@ public class AudioPlaybackManager: NSObject {
     
 // MARK: - Life Cycle
     
-    private override init() {
+    public override init() {
         super.init()
         setupPlayer()
         addNotiObserver()
@@ -166,7 +167,7 @@ public class AudioPlaybackManager: NSObject {
 extension AudioPlaybackManager {
     
     @objc
-    public func setupItem(_ audio: Audio, beginTime: TimeInterval = 0.0) {
+    open func setupItem(_ audio: Audio, beginTime: TimeInterval = 0.0) {
         self.audio = audio
         self.beginTime = beginTime
         
@@ -182,7 +183,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func play() {
+    open func play() {
         guard playerItem != nil else { return }
         
         player.play()
@@ -190,7 +191,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func pause() {
+    open func pause() {
         guard playerItem != nil else { return }
         
         player.pause()
@@ -198,7 +199,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func togglePlayPause() {
+    open func togglePlayPause() {
         guard playerItem != nil else { return }
         
         if player.rate == 0 {
@@ -209,7 +210,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func stop() {
+    open func stop() {
         guard playerItem != nil else { return }
         
         player.pause()
@@ -219,7 +220,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func skipForward(_ timeInterval: TimeInterval) {
+    open func skipForward(_ timeInterval: TimeInterval) {
         guard playerItem != nil else { return }
         
         let currentTime = player.currentTime()
@@ -230,7 +231,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func skipBackward(_ timeInterval: TimeInterval) {
+    open func skipBackward(_ timeInterval: TimeInterval) {
         guard playerItem != nil else { return }
         
         let currentTime = player.currentTime()
@@ -241,7 +242,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func seekToPositionTime(_ positionTime: TimeInterval) {
+    open func seekToPositionTime(_ positionTime: TimeInterval) {
         guard playerItem != nil else { return }
         
         let newTime = CMTime(seconds: positionTime, preferredTimescale: 1)
@@ -249,7 +250,7 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func seekToProgress(_ value: Float) {
+    open func seekToProgress(_ value: Float) {
         guard value >= 0, value <= 1 else { return }
         guard let item = playerItem else { return }
 
@@ -259,21 +260,21 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    public func beginRewind(rate: Float = -2.0) {
+    open func beginRewind(rate: Float = -2.0) {
         guard playerItem != nil else { return }
         
         player.rate = rate
     }
     
     @objc
-    public func beginFastForward(rate: Float = 2.0) {
+    open func beginFastForward(rate: Float = 2.0) {
         guard playerItem != nil else { return }
         
         player.rate = rate
     }
     
     @objc
-    public func endRewindFastForward() {
+    open func endRewindFastForward() {
         guard playerItem != nil else { return }
         
         player.rate = 1.0
@@ -354,7 +355,7 @@ extension AudioPlaybackManager {
 
 extension AudioPlaybackManager {
     
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(AVPlayer.currentItem) {
             let currentItem = player.currentItem
             #if DEBUG

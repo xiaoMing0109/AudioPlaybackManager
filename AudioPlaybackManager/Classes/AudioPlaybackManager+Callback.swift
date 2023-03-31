@@ -73,23 +73,23 @@ public protocol AudioPlaybackManagerDelegate {
     
     /// Play status did change.
     @objc
-    optional func audioPlaybackManage(_ manager: AudioPlaybackManager, playStatusDidChange playStatus: AudioPlaybackManager.PlayStatus)
+    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, playStatusDidChange playStatus: AudioPlaybackManager.PlayStatus)
     
     /// Play time variation.
     @objc
-    optional func audioPlaybackManage(_ manager: AudioPlaybackManager, playTimeVariation playTime: Float64)
+    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, playTimeVariation playTime: Float64)
     
     /// Item duration.
     @objc
-    optional func audioPlaybackManage(_ manager: AudioPlaybackManager, duration: Float64)
+    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, duration: Float64)
     
     /// Item loaded time ranges.
     @objc
-    optional func audioPlaybackManage(_ manager: AudioPlaybackManager, loadedTime: Float64)
+    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, loadedTime: Float64)
     
     /// Rate did change.
     @objc
-    optional func audioPlaybackManage(_ manager: AudioPlaybackManager, rateDidChange rate: Float)
+    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, rateDidChange rate: Float)
     
     /// Remote control previous track.
     @objc
@@ -121,26 +121,26 @@ extension AudioPlaybackManager {
     // MARK: Public Methods
     
     @objc
-    public func addDelegate(_ delegate: AudioPlaybackManagerDelegate) {
+    open func addDelegate(_ delegate: AudioPlaybackManagerDelegate) {
         if !delegates.contains(delegate) {
             delegates.add(delegate)
         }
     }
     
     @objc
-    public func removeDelegate(_ delegate: AudioPlaybackManagerDelegate) {
+    open func removeDelegate(_ delegate: AudioPlaybackManagerDelegate) {
         if delegates.contains(delegate) {
             delegates.remove(delegate)
         }
     }
     
     @objc
-    public func allDelegates() -> [AnyObject] {
+    open func allDelegates() -> [AnyObject] {
         return delegates.allObjects
     }
     
     @objc
-    public func removeAllDelegates() {
+    open func removeAllDelegates() {
         if delegates.count > 0 {
             delegates.removeAllObjects()
         }
@@ -178,8 +178,8 @@ extension AudioPlaybackManager {
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManage(_:playStatusDidChange:))) {
-                delegate.audioPlaybackManage(self, playStatusDidChange: playStatus)
+            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:playStatusDidChange:))) {
+                delegate.audioPlaybackManager(self, playStatusDidChange: playStatus)
             }
         }
     }
@@ -196,8 +196,8 @@ extension AudioPlaybackManager {
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManage(_:playTimeVariation:))) {
-                delegate.audioPlaybackManage(self, playTimeVariation: playTime)
+            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:playTimeVariation:))) {
+                delegate.audioPlaybackManager(self, playTimeVariation: playTime)
             }
         }
     }
@@ -214,8 +214,8 @@ extension AudioPlaybackManager {
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManage(_:duration:))) {
-                delegate.audioPlaybackManage(self, duration: duration)
+            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:duration:))) {
+                delegate.audioPlaybackManager(self, duration: duration)
             }
         }
     }
@@ -232,8 +232,8 @@ extension AudioPlaybackManager {
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManage(_:loadedTime:))) {
-                delegate.audioPlaybackManage(self, loadedTime: loadedTime)
+            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:loadedTime:))) {
+                delegate.audioPlaybackManager(self, loadedTime: loadedTime)
             }
         }
     }
@@ -250,8 +250,8 @@ extension AudioPlaybackManager {
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManage(_:rateDidChange:))) {
-                delegate.audioPlaybackManage(self, rateDidChange: rate)
+            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:rateDidChange:))) {
+                delegate.audioPlaybackManager(self, rateDidChange: rate)
             }
         }
     }
