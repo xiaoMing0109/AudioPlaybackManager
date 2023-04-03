@@ -9,6 +9,7 @@
 import UIKit
 import AudioPlaybackManager
 import RxSwift
+import CoreMedia
 
 class PlayAudioViewController: UIViewController {
     
@@ -38,16 +39,19 @@ class PlayAudioViewController: UIViewController {
         makeConstraints()
         addSubscribe()
         
-        // Remote commands.
+        // 后台 + 设备静音模式 可播放
+        AudioPlaybackManager.shared.setActiveSession(true)
+        
+        // Cache enable for network url.
+        AudioPlaybackManager.shared.cacheEnabled = true
+        
+        // Remote control commands.
         AudioPlaybackManager.shared.activatePlaybackCommands(true)
         AudioPlaybackManager.shared.activatePreviousTrackCommand(true)
         AudioPlaybackManager.shared.activateNextTrackCommand(true)
         AudioPlaybackManager.shared.activateSeekBackwardCommand(true)
         AudioPlaybackManager.shared.activateSeekForwardCommand(true)
         AudioPlaybackManager.shared.activateChangePlaybackPositionCommand(true)
-        
-        // 后台 + 设备静音模式 可播放
-        AudioPlaybackManager.shared.setActiveSession(true)
         
         viewModel.playAudio(at: defaultPlayIndex)
     }
@@ -139,7 +143,7 @@ class PlayAudioViewController: UIViewController {
             } else {
                 make.bottom.equalTo(-20)
             }
-            make.height.equalTo(220)
+            make.height.equalTo(210)
         }
     }
 }

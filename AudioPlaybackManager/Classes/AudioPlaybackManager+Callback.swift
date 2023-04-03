@@ -15,50 +15,13 @@ extension AudioPlaybackManager {
     public static let readyToPlayNotification = Notification.Name(rawValue: "kReadyToPlayNotification")
     
     /// Play status did change.
-    ///
-    /// - userInfoKey: NotificationUserInfoKeys.playStatus
     public static let playStatusDidChangeNotification = Notification.Name(rawValue: "kPlayStatusDidChangeNotification")
-    
-    /// Play time variation.
-    ///
-    /// - userInfoKey: NotificationUserInfoKeys.playTime
-    public static let playTimeNotification = Notification.Name(rawValue: "kPlayTimeNotification")
-    
-    /// Item duration.
-    ///
-    /// - userInfoKey: NotificationUserInfoKeys.duration
-    public static let durationNotification = Notification.Name(rawValue: "kDurationNotification")
-    
-    /// Item loaded time ranges.
-    ///
-    /// - userInfoKey: NotificationUserInfoKeys.loadedTime
-    public static let loadedTimeNotification = Notification.Name(rawValue: "kLoadedTimeNotification")
-    
-    /// Rate did change.
-    ///
-    /// - userInfoKey: NotificationUserInfoKeys.rate
-    public static let rateDidChangeNotification = Notification.Name("kRateDidChangeNotification")
     
     /// Remote control previous track.
     public static let previousTrackNotification = Notification.Name(rawValue: "kPreviousTrackNotification")
     
     /// Remote control next track.
     public static let nextTrackNotification = Notification.Name(rawValue: "kNextTrackNotification")
-    
-    public struct NotificationUserInfoKeys {
-        /// `PlayStatus`
-        public static let playStatus = "playStatus"
-        
-        /// Float64
-        public static let playTime = "playTime"
-        /// Float64
-        public static let duration = "duration"
-        /// Float64
-        public static let loadedTime = "loadedTime"
-        
-        /// Float
-        public static let rate = "rate"
-    }
 }
 
 // MARK: - Delegate
@@ -74,22 +37,6 @@ public protocol AudioPlaybackManagerDelegate {
     /// Play status did change.
     @objc
     optional func audioPlaybackManager(_ manager: AudioPlaybackManager, playStatusDidChange playStatus: AudioPlaybackManager.PlayStatus)
-    
-    /// Play time variation.
-    @objc
-    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, playTimeVariation playTime: Float64)
-    
-    /// Item duration.
-    @objc
-    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, duration: Float64)
-    
-    /// Item loaded time ranges.
-    @objc
-    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, loadedTime: Float64)
-    
-    /// Rate did change.
-    @objc
-    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, rateDidChange rate: Float)
     
     /// Remote control previous track.
     @objc
@@ -167,91 +114,16 @@ extension AudioPlaybackManager {
     }
     
     internal func respondPlayStatusDidChangeCallback() {
-        let userInfo: [String: Any] = [
-            NotificationUserInfoKeys.playStatus: playStatus
-        ]
         let noti = Notification(
             name: AudioPlaybackManager.playStatusDidChangeNotification,
             object: self,
-            userInfo: userInfo
+            userInfo: nil
         )
         NotificationCenter.default.post(noti)
         
         allDelegates().forEach { delegate in
             if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:playStatusDidChange:))) {
                 delegate.audioPlaybackManager(self, playStatusDidChange: playStatus)
-            }
-        }
-    }
-    
-    internal func respondPlayTimeVariationCallback(playTime: Float64) {
-        let userInfo: [String: Any] = [
-            NotificationUserInfoKeys.playTime: playTime
-        ]
-        let noti = Notification(
-            name: AudioPlaybackManager.playTimeNotification,
-            object: self,
-            userInfo: userInfo
-        )
-        NotificationCenter.default.post(noti)
-        
-        allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:playTimeVariation:))) {
-                delegate.audioPlaybackManager(self, playTimeVariation: playTime)
-            }
-        }
-    }
-    
-    internal func respondDurationCallback(duration: Float64) {
-        let userInfo: [String: Any] = [
-            NotificationUserInfoKeys.duration: duration
-        ]
-        let noti = Notification(
-            name: AudioPlaybackManager.durationNotification,
-            object: self,
-            userInfo: userInfo
-        )
-        NotificationCenter.default.post(noti)
-        
-        allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:duration:))) {
-                delegate.audioPlaybackManager(self, duration: duration)
-            }
-        }
-    }
-    
-    internal func respondLoadedTimeCallback(loadedTime: Float64) {
-        let userInfo: [String: Any] = [
-            NotificationUserInfoKeys.loadedTime: loadedTime
-        ]
-        let noti = Notification(
-            name: AudioPlaybackManager.loadedTimeNotification,
-            object: self,
-            userInfo: userInfo
-        )
-        NotificationCenter.default.post(noti)
-        
-        allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:loadedTime:))) {
-                delegate.audioPlaybackManager(self, loadedTime: loadedTime)
-            }
-        }
-    }
-    
-    internal func respondRateDidChangeCallback(rate: Float) {
-        let userInfo: [String: Any] = [
-            NotificationUserInfoKeys.rate: rate
-        ]
-        let noti = Notification(
-            name: AudioPlaybackManager.rateDidChangeNotification,
-            object: self,
-            userInfo: userInfo
-        )
-        NotificationCenter.default.post(noti)
-        
-        allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:rateDidChange:))) {
-                delegate.audioPlaybackManager(self, rateDidChange: rate)
             }
         }
     }

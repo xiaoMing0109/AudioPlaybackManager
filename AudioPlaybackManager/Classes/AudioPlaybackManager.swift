@@ -49,6 +49,39 @@ open class AudioPlaybackManager: NSObject {
     @objc
     open var shouldResumeWhenInterruptEnded = true
     
+    /// Update periodic time to `timeObserver`.
+    ///
+    /// Default is
+    /// ```
+    /// CMTime(seconds: 1.0 / 30, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+    /// ```
+    @objc
+    open var observeTimeInterval = CMTime(seconds: 1.0 / 30, preferredTimescale: CMTimeScale(NSEC_PER_SEC)) {
+        willSet {
+            if let timeObserver = timeObserver {
+                player.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
+        }
+        didSet {
+            timeObserver = player.addPeriodicTimeObserver(forInterval: observeTimeInterval, queue: .main) { [weak self] time in
+                guard let self = self else { return }
+                guard !self.isSeeking else { return }
+                
+                let playTime = CMTimeGetSeconds(time)
+                var progress: Float {
+                    let duration = self.duration
+                    if duration == 0 {
+                        return 0
+                    }
+                    return Float(playTime / duration)
+                }
+                self.playTime = playTime
+                self.progress = progress
+            }
+        }
+    }
+    
     @objc
     open var isMuted: Bool {
         get { return player.isMuted }
@@ -130,11 +163,16 @@ open class AudioPlaybackManager: NSObject {
     
     // MARK: Private Properties
     
+    /// A periodic time observer to keep `playTime` and `progress` up to date.
     private var timeObserver: Any?
-    private let timeInterval = CMTime(seconds: 1.0 / 60, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
     
     /// Record `setupItem(_:beginTime:)` beginTime.
     private var beginTime: TimeInterval = 0
+    
+    /// Is skipping playing.
+    ///
+    /// `playTime` and `progress` will stop updating while the seek operation is running.
+    private var isSeeking: Bool = false
     
 // MARK: - Life Cycle
     
@@ -172,7 +210,7 @@ extension AudioPlaybackManager {
         self.beginTime = beginTime
         
         let url = audio.audioURL
-        if cacheEnabled {
+        if !url.isFileURL, cacheEnabled {
             playerItem = generateCachePlayerItem(withURL: url)
         } else {
             playerItem = AVPlayerItem(url: url)
@@ -217,6 +255,20 @@ extension AudioPlaybackManager {
         player.replaceCurrentItem(with: nil)
         
         playStatus = .stop
+    }
+    
+    @objc
+    open func nextTrack() {
+        guard playerItem != nil else { return }
+        
+        respondNextTrackCallback()
+    }
+    
+    @objc
+    open func previousTrack() {
+        guard playerItem != nil else { return }
+        
+        respondPreviousTrackCallback()
     }
     
     @objc
@@ -279,18 +331,6 @@ extension AudioPlaybackManager {
         
         player.rate = 1.0
     }
-    
-    internal func nextTrack() {
-        guard playerItem != nil else { return }
-        
-        respondNextTrackCallback()
-    }
-    
-    internal func previousTrack() {
-        guard playerItem != nil else { return }
-        
-        respondPreviousTrackCallback()
-    }
 }
 
 // MARK: - Private Methods
@@ -298,21 +338,9 @@ extension AudioPlaybackManager {
 extension AudioPlaybackManager {
     
     private func setupPlayer() {
-        // Add a periodic time observer to keep `playTime` and `progress` up to date.
-        timeObserver = player.addPeriodicTimeObserver(forInterval: timeInterval, queue: .main) { [weak self] time in
-            guard let self = self else { return }
-            let playTime = CMTimeGetSeconds(time)
-            var progress: Float {
-                if self.duration == 0 {
-                    return 0
-                }
-                return Float(playTime / self.duration)
-            }
-            self.playTime = playTime
-            self.progress = progress
-            
-            self.respondPlayTimeVariationCallback(playTime: playTime)
-        }
+        // Set default periodic time to observer.
+        let observeTimeInterval = self.observeTimeInterval
+        self.observeTimeInterval = observeTimeInterval
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.new], context: nil)
@@ -344,8 +372,12 @@ extension AudioPlaybackManager {
             return
         }
         
+        isSeeking = true
         player.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero) { [weak self] _ in
             guard let self = self else { return }
+            
+            self.isSeeking = false
+            
             self.updatePlaybackMetadata()
         }
     }
@@ -374,7 +406,6 @@ extension AudioPlaybackManager {
             #endif
             
             self.rate = rate
-            respondRateDidChangeCallback(rate: rate)
             
             updatePlaybackMetadata()
         } else if keyPath == #keyPath(AVPlayerItem.status) {
@@ -390,7 +421,6 @@ extension AudioPlaybackManager {
             case .unknown: break
             case .readyToPlay:
                 self.duration = duration
-                respondDurationCallback(duration: duration)
                 
                 seekToBeginTimeWhenItemReady()
             case .failed:
@@ -407,7 +437,6 @@ extension AudioPlaybackManager {
             #endif
             
             self.loadedTime = loadedTime
-            respondLoadedTimeCallback(loadedTime: loadedTime)
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -445,8 +474,8 @@ extension AudioPlaybackManager {
         #endif
         
         let duration = CMTimeGetSeconds(playerItem.duration)
+        // Sync play time to end time.
         playTime = duration
-        respondPlayTimeVariationCallback(playTime: duration)
         
         playStatus = .playCompleted
     }

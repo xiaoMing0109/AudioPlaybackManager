@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import AudioPlaybackManager
 
-class PlayAudioViewModel {
+class PlayAudioViewModel: NSObject {
     
 // MARK: Public Property
     
@@ -31,12 +31,6 @@ class PlayAudioViewModel {
         return playStatus == .prepare || playStatus == .playing
     }
     
-    /// 模拟音频音轨 path
-    ///
-    /// 统一创建, 避免来回切换音频时产生同一首音频 path 不一致。
-    private(set) lazy var progressViewPaths: [Int: CGPath] = [:]
-    let progressViewLineWidth: CGFloat = 3
-    
 // MARK: Private Property
     
     /// 拖动播放进度条时会暂停 playTime 回调
@@ -47,12 +41,18 @@ class PlayAudioViewModel {
     
 // MARK: ============== Life Cycle ==============
     init(audioURLs: [URL]) {
+        super.init()
         initializeItemsData(with: audioURLs)
         addNotiObserver()
+        addKeyValueObserver()
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        
+        AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playTime))
+        AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.duration))
+        AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.loadedTime))
     }
 }
 
@@ -74,107 +74,15 @@ extension PlayAudioViewModel {
         self.items.accept(items)
     }
     
-    private func addNotiObserver() {
-        let userInfoKeys = AudioPlaybackManager.NotificationUserInfoKeys.self
-        
-        // Ready to play noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.readyToPlayNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            if !self.isForcePause {
-                AudioPlaybackManager.shared.play()
-            }
-        }
-        
-        // Play status did change noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.playStatusDidChangeNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            guard let userInfo = noti.userInfo,
-                  let status = userInfo[userInfoKeys.playStatus] as? AudioPlaybackManager.PlayStatus
-            else { return }
-
-            /// 切换状态
-            ///
-            /// 控制器监听到 finished 状态后, 自动进行切歌操作, 就会触发 prepare 状态,
-            /// RX 会判定为 sequence 中的上一个 event 未结束, 又添加进了新的 event,
-            /// 怀疑可能进入了循环, 而 log 警告。
-            /// 为避免产生警告, 因此这里统一处理为异步执行。
-            DispatchQueue.main.async {
-                self.playStatus.accept(status)
-            }
-        }
-        
-        // Play time variation noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.playTimeNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            guard let userInfo = noti.userInfo,
-                  let playTime = userInfo[userInfoKeys.playTime] as? Float64
-            else { return }
-
-            if !self.isTracking {
-                self.playTime.accept(playTime)
-            }
-        }
-        
-        // Duration noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.durationNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            guard let userInfo = noti.userInfo,
-                  let duration = userInfo[userInfoKeys.duration] as? Float64
-            else { return }
-
-            self.itemDuration.accept(duration)
-        }
-        
-        // Loaded time ranges noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.loadedTimeNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            guard let userInfo = noti.userInfo,
-                  let loadedTime = userInfo[userInfoKeys.loadedTime] as? Float64
-            else { return }
-
-            self.loadedTime.accept(loadedTime)
-        }
-        
-        // Remote control previous track noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.previousTrackNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            self.switchAudio(isNext: false)
-        }
-        
-        // Remote control next track noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.nextTrackNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            self.switchAudio(isNext: true)
-        }
+    private func resetPlayTime() {
+        self.playTime.accept(0)
     }
     
-    /// 设置初始 playTime.
-    /// - Parameters:
-    ///   - playTime: 播放第一首时需要查询上次播放进度, 传入 nil 即可, 则从本地获取;
-    ///               切歌时传入 0, 从头开始。
-    ///   - index: Item index.
-    private func setupInitialPlayTime(_ playTime: Float64?, at index: Int) {
-        guard let playTime = playTime else {
-            self.playTime.accept(0)
-            return
-        }
-        self.playTime.accept(playTime)
-    }
-    
-    /// 设置初始音频时长, 本地查询
-    private func setupInitialDuration(at index: Int) {
+    private func resetDuration() {
         self.itemDuration.accept(0)
     }
     
-    /// 重置缓存进度
-    private func resetInitialLoadedTime() {
+    private func resetLoadedTime() {
         loadedTime.accept(0)
     }
 }
@@ -220,9 +128,9 @@ extension PlayAudioViewModel {
 
         /// Update play time, duration, loadedTime and index.
         playIndex.accept(index)
-        setupInitialPlayTime(nil, at: index)
-        setupInitialDuration(at: index)
-        resetInitialLoadedTime()
+        resetPlayTime()
+        resetDuration()
+        resetLoadedTime()
 
         // play
         let items = items.value
@@ -230,6 +138,7 @@ extension PlayAudioViewModel {
     }
     
     /// 暂停或继续播放.
+    ///
     /// 针对当前 index.
     func pauseOrResume() {
         guard let playStatus = playStatus.value else {
@@ -260,13 +169,6 @@ extension PlayAudioViewModel {
         }
     }
     
-    /// 用于记录 `.prepare` 阶段用户手动点击 播放/暂停.
-    func forcePause() {
-        isForcePause = true
-        
-        AudioPlaybackManager.shared.pause()
-    }
-    
     /// 切歌
     func switchAudio(isNext: Bool) {
         guard let index = playIndex.value else {
@@ -290,9 +192,9 @@ extension PlayAudioViewModel {
         
         /// Update play time, duration, loadedTime and index.
         playIndex.accept(index)
-        setupInitialPlayTime(0, at: index)
-        setupInitialDuration(at: index)
-        resetInitialLoadedTime()
+        resetPlayTime()
+        resetDuration()
+        resetLoadedTime()
         
         // play
         let items = items.value
@@ -304,10 +206,19 @@ extension PlayAudioViewModel {
     }
     
     func setIsTracking(_ isTracking: Bool, value: Float?) {
-        self.isTracking = isTracking
+        defer { self.isTracking = isTracking }
+        
         if !isTracking, let value = value {
             AudioPlaybackManager.shared.seekToProgress(value)
         }
+    }
+    
+    func skipForward(_ timeInterval: TimeInterval) {
+        AudioPlaybackManager.shared.skipForward(timeInterval)
+    }
+    
+    func skipBackward(_ timeInterval: TimeInterval) {
+        AudioPlaybackManager.shared.skipBackward(timeInterval)
     }
 }
 
@@ -318,47 +229,68 @@ extension PlayAudioViewModel {}
 extension PlayAudioViewModel {}
 
 // MARK: ============== Observer ==============
-extension PlayAudioViewModel {}
-
-// MARK: ============== Notification ==============
-extension PlayAudioViewModel {}
-
-// MARK: - Audio ProgressView Path
-
 extension PlayAudioViewModel {
     
-    func fetchProgressViewPath(at index: Int) -> CGPath {
-        if let path = progressViewPaths[index] {
-            return path
-        }
-        
-        let path = generateProgressViewPath()
-        progressViewPaths[index] = path
-        return path
+    private func addKeyValueObserver() {
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playTime), options: NSKeyValueObservingOptions.new, context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.duration), options: NSKeyValueObservingOptions.new, context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.loadedTime), options: NSKeyValueObservingOptions.new, context: nil)
     }
     
-    private func generateProgressViewPath() -> CGPath {
-        let canvasSize = CGSize(width: SCREEN_WIDTH - 50 * 2, height: 32)
-        let drawMargin: CGFloat = 3
-        let drawLineWidth = progressViewLineWidth
-        let drawLineMinHeight: CGFloat = 4
-        // `layer.lineCap` 会在原有 `lineWidth` 范围外生成, 避免尖部被裁切掉这里提前减去
-        let drawLineMaxHeight: CGFloat = canvasSize.height - drawLineWidth
-        
-        let path = UIBezierPath()
-        var x: CGFloat = 0.0
-        while x + drawLineWidth <= canvasSize.width {
-            x += drawLineWidth / 2
-            
-            let randomHeight = CGFloat.random(in: drawLineMinHeight ... drawLineMaxHeight)
-            let beginY = drawLineWidth * 0.5 + (drawLineMaxHeight - randomHeight) * 0.5
-            let endY = beginY + randomHeight
-            
-            path.move(to: CGPoint(x: x, y: beginY))
-            path.addLine(to: CGPoint(x: x, y: endY))
-            
-            x += (drawLineWidth / 2) + drawMargin
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(AudioPlaybackManager.playTime) {
+            if !isTracking {
+                playTime.accept(AudioPlaybackManager.shared.playTime)
+            }
+        } else if keyPath == #keyPath(AudioPlaybackManager.duration) {
+            itemDuration.accept(AudioPlaybackManager.shared.duration)
+        } else if keyPath == #keyPath(AudioPlaybackManager.loadedTime) {
+            loadedTime.accept(AudioPlaybackManager.shared.loadedTime)
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
-        return path.cgPath
+    }
+}
+
+// MARK: ============== Notification ==============
+extension PlayAudioViewModel {
+    
+    private func addNotiObserver() {
+        // Ready to play noti.
+        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.readyToPlayNotification, object: nil, queue: .main) { [weak self] noti in
+            guard let self = self else { return }
+
+            if !self.isForcePause {
+                AudioPlaybackManager.shared.play()
+            }
+        }
+        
+        // Play status did change noti.
+        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.playStatusDidChangeNotification, object: nil, queue: .main) { [weak self] noti in
+            guard let self = self else { return }
+
+            /// 切换状态
+            ///
+            /// 控制器监听到 finished 状态后, 自动进行切歌操作, 就会触发即将播放音乐的 prepare 状态,
+            /// 会 被 RX 判定为 sequence 中的上一个 event 未结束, 又添加进了新的 event,
+            /// 怀疑可能进入了循环, 而 log 警告。为避免产生警告, 因此这里统一处理为异步执行。
+            DispatchQueue.main.async {
+                self.playStatus.accept(AudioPlaybackManager.shared.playStatus)
+            }
+        }
+        
+        // Remote control previous track noti.
+        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.previousTrackNotification, object: nil, queue: .main) { [weak self] noti in
+            guard let self = self else { return }
+
+            self.switchAudio(isNext: false)
+        }
+        
+        // Remote control next track noti.
+        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.nextTrackNotification, object: nil, queue: .main) { [weak self] noti in
+            guard let self = self else { return }
+
+            self.switchAudio(isNext: true)
+        }
     }
 }

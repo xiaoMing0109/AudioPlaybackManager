@@ -22,17 +22,17 @@ class PlayAudioControlView: UIView {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var backwardButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
-    @IBOutlet weak var controlButtonsStackViewConstraintBottom: NSLayoutConstraint!
-    @IBOutlet weak var controlButtonsStackViewConstraintTop: NSLayoutConstraint!
     
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var playtimeLabel: UILabel!
+    @IBOutlet weak var progressSlider: UISlider!
     
     @IBOutlet weak var volumeStackView: UIStackView!
     
-    @IBOutlet weak var progressBackgroundView: UIView!
-    
     private var viewModel: PlayAudioViewModel!
+    
+    private var sliderBufferTrackViewProgressWidth: CGFloat = 0
+    private var sliderMinTrackViewProgressWidth: CGFloat = 0
     
 // MARK: ============== Life Cycle ==============
     override func awakeFromNib() {
@@ -42,6 +42,13 @@ class PlayAudioControlView: UIView {
     }
     
     override func updateConstraints() {
+        sliderMinTrackView.snp.updateConstraints { make in
+            make.width.equalTo(sliderMinTrackViewProgressWidth)
+        }
+        
+        sliderBufferTrackView.snp.updateConstraints { make in
+            make.width.equalTo(sliderBufferTrackViewProgressWidth)
+        }
         
         super.updateConstraints()
     }
@@ -59,7 +66,7 @@ class PlayAudioControlView: UIView {
     private func setupSubviews() {
         setupControlButtons()
         setupVolumeSlider()
-        setupProgressView()
+        setupProgressSlider()
     }
     
     private func setupControlButtons() {
@@ -100,8 +107,8 @@ class PlayAudioControlView: UIView {
         return view
     }()
     
-    private lazy var volumeView: PLMVolumeView = {
-        let view = PLMVolumeView()
+    private lazy var volumeView: VolumeView = {
+        let view = VolumeView()
         view.showsRouteButton = false
         view.showsVolumeSlider = true
         view.setVolumeThumbImage(volumeSliderThumbImage, for: .normal)
@@ -141,12 +148,44 @@ class PlayAudioControlView: UIView {
         return view.toImage
     }()
     
-    private func setupProgressView() {
-        progressBackgroundView.addSubview(progressView)
+    private func setupProgressSlider() {
+        let sliderThumbImage: UIImage? = {
+            let view = UIView()
+            view.frame = CGRect(origin: .zero, size: CGSize(width: 16, height: 16))
+            view.backgroundColor = UIColor("#33A6B9")
+            view.layer.cornerRadius = 8
+            view.layer.masksToBounds = true
+            view.layer.borderWidth = 2
+            view.layer.borderColor = UIColor.white.cgColor
+            return view.toImage
+        }()
+        
+        progressSlider.setThumbImage(sliderThumbImage, for: .normal)
+        progressSlider.setThumbImage(sliderThumbImage, for: .highlighted)
+        
+        progressSlider.insertSubview(sliderMaxTrackView, at: 0)
+        progressSlider.insertSubview(sliderBufferTrackView, aboveSubview: sliderMaxTrackView)
+        progressSlider.insertSubview(sliderMinTrackView, aboveSubview: sliderBufferTrackView)
     }
     
-    private lazy var progressView: PlayAudioProgressView = {
-        let view = PlayAudioProgressView()
+    private lazy var sliderMaxTrackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hexString: "#33A6B9", alpha: 0.15)
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
+    private lazy var sliderBufferTrackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hexString: "#33A6B9", alpha: 0.15)
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
+    private lazy var sliderMinTrackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hexString: "#33A6B9", alpha: 1)
+        view.layer.cornerRadius = 3
         return view
     }()
     
@@ -164,8 +203,24 @@ class PlayAudioControlView: UIView {
             make.size.equalTo(volumeDownImageView)
         }
         
-        progressView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        sliderMaxTrackView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(6)
+        }
+        
+        sliderBufferTrackView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(6)
+            make.width.equalTo(0)// Will update.
+        }
+        
+        sliderMinTrackView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(6)
+            make.width.equalTo(0)// Will update.
         }
     }
 }
@@ -192,10 +247,8 @@ extension PlayAudioControlView {
         let loadedTime = viewModel.loadedTime.value
         // 未加载到缓冲前不展示时长(时长为通过 `AVPlayerItem` 获取)
         if loadedTime <= 0 {
-            durationLabel.isHidden = true
+            durationLabel.text = "-- : --"
         } else {
-            durationLabel.isHidden = false
-         
             let duration = viewModel.itemDuration.value
             let second = Int(duration) % 60
             let min = Int(duration) / 60
@@ -206,37 +259,50 @@ extension PlayAudioControlView {
     /// value != nil, 为拖动进度条
     private func updatePlayTimeAndProgress(value: Float? = nil) {
         let duration = viewModel.itemDuration.value
-        var playTime: Float64
-        if let value = value {
-            playTime = Float64(value) * duration
-        } else {
-            playTime = viewModel.playTime.value
-        }
-        
-        do {
-            let loadedTime = viewModel.loadedTime.value
-            if playTime <= loadedTime, loadedTime > 0 {
-                let second = Int(playTime) % 60
-                let min = Int(playTime) / 60
-                playtimeLabel.text = String(format: "%02d : %02d", min, second)
+        let playTime: Float64 = {
+            if let value = value {
+                return Float64(value) * duration
             } else {
-                playtimeLabel.text = "Loading..."
+                return viewModel.playTime.value
             }
+        }()
+        
+        do {
+            let second = Int(playTime) % 60
+            let min = Int(playTime) / 60
+            playtimeLabel.text = String(format: "%02d : %02d", min, second)
         }
         
         do {
-            let progress: CGFloat = {
+            let progress: Float = {
                 if duration == 0 {
                     return 0
                 } else {
-                    return CGFloat(playTime / duration)
+                    return Float(playTime / duration)
                 }
             }()
-            progressView.update(progress: progress)
+            progressSlider.setValue(progress, animated: false)
+            
+            var width: CGFloat {
+                return CGFloat(progress) * sliderMaxTrackView.bounds.width
+            }
+            sliderMinTrackViewProgressWidth = width
+            setNeedsUpdateConstraints()
         }
     }
     
-    private func updateLoadedTimeProgress(with loadedTime: Float64) {}
+    private func updateLoadedTimeProgress(with loadedTime: Float64) {
+        let duration = viewModel.itemDuration.value
+        
+        var width: CGFloat {
+            if duration == 0 {
+                return 0
+            }
+            return CGFloat(loadedTime / duration) * sliderMaxTrackView.bounds.width
+        }
+        sliderBufferTrackViewProgressWidth = width
+        setNeedsUpdateConstraints()
+    }
     
     /// Loading animation.
     private func startLoadingAnimation() {
@@ -299,11 +365,6 @@ extension PlayAudioControlView {
                     previousButton.isEnabled = true
                     nextButton.isEnabled = true
                 }
-                
-                progressView.fillData(
-                    lineWidth: viewModel.progressViewLineWidth,
-                    path: viewModel.fetchProgressViewPath(at: index)
-                )
             }
         })
         .disposed(by: disposeBag)
@@ -348,25 +409,9 @@ extension PlayAudioControlView {
                 viewModel.switchAudio(isNext: true)
             }
         case backwardButton:
-            let duration = viewModel.itemDuration.value
-            guard duration > 0 else { return }
-            
-            let playTime = viewModel.playTime.value
-            guard playTime > 0 else { return }
-            
-            let step: TimeInterval = -15
-            var target: TimeInterval = playTime + step
-            if target <= 0 { target = 0 }
-            viewModel.setIsTracking(false, value: Float(target / duration))
+            viewModel.skipBackward(15)
         case forwardButton:
-            let duration = viewModel.itemDuration.value
-            guard duration > 0 else { return }
-            
-            let playTime = viewModel.playTime.value
-            let step: TimeInterval = 30
-            var target: TimeInterval = playTime + step
-            if target >= duration { target = duration }
-            viewModel.setIsTracking(false, value: Float(target / duration))
+            viewModel.skipForward(30)
         default: break
         }
     }
@@ -381,9 +426,9 @@ extension PlayAudioControlView {}
 // MARK: ============== Notification ==============
 extension PlayAudioControlView {}
 
-// MARK: MPVolumeView
+// MARK: - MPVolumeView
 
-class PLMVolumeView: MPVolumeView {
+class VolumeView: MPVolumeView {
 
     override func volumeSliderRect(forBounds bounds: CGRect) -> CGRect {
         return CGRect(

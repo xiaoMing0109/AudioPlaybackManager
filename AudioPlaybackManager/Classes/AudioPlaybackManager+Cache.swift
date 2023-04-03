@@ -16,7 +16,7 @@ extension AudioPlaybackManager {
     
     // MARK: Public Properties
     
-    /// Cache enabled.
+    /// Allow cache online resources and load from the cache.
     ///
     /// Default is `false`.
     @objc
