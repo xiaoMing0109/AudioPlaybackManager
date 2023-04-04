@@ -29,16 +29,11 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
-
-  s.source_files = 'AudioPlaybackManager/Classes/**/*'
-  
-  s.ios.deployment_target = '10.0'
-  s.requires_arc          = true
   s.swift_version         = '5.0'
+  s.requires_arc          = true
   
   s.source_files = 'AudioPlaybackManager/Classes/**/*'
-
-  s.public_header_files = 'Pod/Classes/**/*.h'
+  
   s.frameworks = 'UIKit', 'Foundation', 'AVFoundation', 'MediaPlayer'
   
   s.dependency 'VIMediaCache', '~> 0.4'

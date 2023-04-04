@@ -34,6 +34,16 @@ class PlayAudioControlView: UIView {
     private var sliderBufferTrackViewProgressWidth: CGFloat = 0
     private var sliderMinTrackViewProgressWidth: CGFloat = 0
     
+    /// The instance of `DateComponentsFormatter` used for formatting times displayed in `playtimeLabel` and `durationLabel`.
+    private let dateComponentsFormatter: DateComponentsFormatter = {
+        // Configure the `DateComponentsFormatter` for formatting strings in a "0:00" format.
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .positional
+        formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = [.pad]
+        return formatter
+    }()
+    
 // MARK: ============== Life Cycle ==============
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -228,12 +238,6 @@ class PlayAudioControlView: UIView {
 // MARK: ============== Private ==============
 extension PlayAudioControlView {
     
-    private func fillData() {
-        handlePlayButtonStatus()
-        handleAudioDuration()
-        updatePlayTimeAndProgress()
-    }
-    
     private func handlePlayButtonStatus() {
         switch viewModel.playStatus.value {
         case .prepare, .playing:
@@ -244,16 +248,8 @@ extension PlayAudioControlView {
     }
     
     private func handleAudioDuration() {
-        let loadedTime = viewModel.loadedTime.value
-        // 未加载到缓冲前不展示时长(时长为通过 `AVPlayerItem` 获取)
-        if loadedTime <= 0 {
-            durationLabel.text = "-- : --"
-        } else {
-            let duration = viewModel.itemDuration.value
-            let second = Int(duration) % 60
-            let min = Int(duration) / 60
-            durationLabel.text = String(format: "%02d : %02d", min, second)
-        }
+        let duration = viewModel.itemDuration.value
+        durationLabel.text = dateComponentsFormatter.string(from: duration)
     }
     
     /// value != nil, 为拖动进度条
@@ -268,9 +264,7 @@ extension PlayAudioControlView {
         }()
         
         do {
-            let second = Int(playTime) % 60
-            let min = Int(playTime) / 60
-            playtimeLabel.text = String(format: "%02d : %02d", min, second)
+            playtimeLabel.text = dateComponentsFormatter.string(from: playTime)
         }
         
         do {
@@ -291,7 +285,8 @@ extension PlayAudioControlView {
         }
     }
     
-    private func updateLoadedTimeProgress(with loadedTime: Float64) {
+    private func updateLoadedTimeProgress() {
+        let loadedTime = viewModel.loadedTime.value
         let duration = viewModel.itemDuration.value
         
         var width: CGFloat {
@@ -302,6 +297,31 @@ extension PlayAudioControlView {
         }
         sliderBufferTrackViewProgressWidth = width
         setNeedsUpdateConstraints()
+    }
+    
+    private func handleLoadingButtonStatus() {
+        switch viewModel.playStatus.value {
+        case .prepare:
+            loadingButton.isHidden = false
+        default:
+            loadingButton.isHidden = true
+        }
+    }
+    
+    private func handleTrackButtonStatus() {
+        let index = viewModel.playIndex.value
+        let count = viewModel.items.value.count
+        
+        if index == 0 {
+            previousButton.isEnabled = false
+            nextButton.isEnabled = true
+        } else if index == count - 1 {
+            previousButton.isEnabled = true
+            nextButton.isEnabled = false
+        } else {
+            previousButton.isEnabled = true
+            nextButton.isEnabled = true
+        }
     }
     
     /// Loading animation.
@@ -320,19 +340,10 @@ extension PlayAudioControlView {
     
     func bindViewModel(_ viewModel: PlayAudioViewModel, disposeBag: DisposeBag) {
         self.viewModel = viewModel
-        fillData()
         
-        viewModel.playStatus.subscribe(onNext: { [unowned self] status in
-            if let status = status {
-                switch status {
-                case .prepare:
-                    loadingButton.isHidden = false
-                default:
-                    loadingButton.isHidden = true
-                }
-            }
-            
+        viewModel.playStatus.subscribe(onNext: { [unowned self] _ in
             handlePlayButtonStatus()
+            handleLoadingButtonStatus()
         })
         .disposed(by: disposeBag)
         
@@ -346,26 +357,13 @@ extension PlayAudioControlView {
         })
         .disposed(by: disposeBag)
         
-        viewModel.loadedTime.subscribe(onNext: { [unowned self] value in
-            updateLoadedTimeProgress(with: value)
-            handleAudioDuration()
+        viewModel.loadedTime.subscribe(onNext: { [unowned self] _ in
+            updateLoadedTimeProgress()
         })
         .disposed(by: disposeBag)
         
-        viewModel.playIndex.subscribe(onNext: { [unowned self] index in
-            if let index = index {
-                let count = viewModel.items.value.count
-                if index == 0 {
-                    previousButton.isEnabled = false
-                    nextButton.isEnabled = true
-                } else if index == count - 1 {
-                    previousButton.isEnabled = true
-                    nextButton.isEnabled = false
-                } else {
-                    previousButton.isEnabled = true
-                    nextButton.isEnabled = true
-                }
-            }
+        viewModel.playIndex.subscribe(onNext: { [unowned self] _ in
+            handleTrackButtonStatus()
         })
         .disposed(by: disposeBag)
     }
@@ -391,9 +389,7 @@ extension PlayAudioControlView {
     }
     
     @IBAction func onClickedButtonAction(_ sender: UIButton) {
-        guard let index = viewModel.playIndex.value else {
-            return
-        }
+        guard let index = viewModel.playIndex.value else { return }
         
         switch sender {
         case playButton:

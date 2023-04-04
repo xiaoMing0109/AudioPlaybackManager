@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AudioPlaybackManager: fd35be49db98a9397b059a2e58bf0760d18eb0b7
+  AudioPlaybackManager: 5ed0f6f50e6191a97b78f48c6efacfe17067cbe4
   QQCorner: 3d1028fb3550af863075e0d4dba040cab6fbe25d
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd

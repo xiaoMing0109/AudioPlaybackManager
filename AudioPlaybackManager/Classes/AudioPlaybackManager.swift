@@ -143,9 +143,6 @@ open class AudioPlaybackManager: NSObject {
             NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         }
         didSet {
-            // reset
-            playTime = 0; duration = 0; loadedTime = 0; progress = 0
-            
             guard let playerItem = playerItem else { return }
             
             // AVPlayerItem status.

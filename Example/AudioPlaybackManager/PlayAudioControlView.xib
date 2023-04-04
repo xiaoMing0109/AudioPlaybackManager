@@ -38,18 +38,18 @@
                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0do-4z-ah3">
                     <rect key="frame" x="50" y="46" width="284" height="50"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VjQ-kz-gtZ">
-                            <rect key="frame" x="0.0" y="0.0" width="43" height="50"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VjQ-kz-gtZ">
+                            <rect key="frame" x="0.0" y="0.0" width="35.5" height="50"/>
                             <fontDescription key="fontDescription" name="Dosis-Regular" family="Dosis" pointSize="14"/>
                             <color key="textColor" red="0.20000000000000001" green="0.65098039215686276" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6P-h6-fYG" userLabel="Spacer">
-                            <rect key="frame" x="43" y="0.0" width="198" height="50"/>
+                            <rect key="frame" x="35.5" y="0.0" width="222.5" height="50"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01 : 40" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnP-8h-ejT">
-                            <rect key="frame" x="241" y="0.0" width="43" height="50"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnP-8h-ejT">
+                            <rect key="frame" x="258" y="0.0" width="26" height="50"/>
                             <fontDescription key="fontDescription" name="Dosis-Regular" family="Dosis" pointSize="14"/>
                             <color key="textColor" red="0.20000000000000001" green="0.65098039215686276" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
