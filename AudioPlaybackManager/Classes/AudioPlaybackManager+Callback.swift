@@ -14,9 +14,6 @@ extension AudioPlaybackManager {
     /// call `play()` after receiving notification when `autoPlayWhenItemReady = false`.
     public static let readyToPlayNotification = Notification.Name(rawValue: "kReadyToPlayNotification")
     
-    /// Play status did change.
-    public static let playStatusDidChangeNotification = Notification.Name(rawValue: "kPlayStatusDidChangeNotification")
-    
     /// Remote control previous track.
     public static let previousTrackNotification = Notification.Name(rawValue: "kPreviousTrackNotification")
     
@@ -33,10 +30,6 @@ public protocol AudioPlaybackManagerDelegate {
     /// call `play()` when `autoPlayWhenItemReady = false`.
     @objc
     optional func audioPlaybackManagerRreadyToPlay(_ manager: AudioPlaybackManager)
-    
-    /// Play status did change.
-    @objc
-    optional func audioPlaybackManager(_ manager: AudioPlaybackManager, playStatusDidChange playStatus: AudioPlaybackManager.PlayStatus)
     
     /// Remote control previous track.
     @objc
@@ -109,21 +102,6 @@ extension AudioPlaybackManager {
         allDelegates().forEach { delegate in
             if delegate.responds(to: #selector(delegate.audioPlaybackManagerRreadyToPlay(_:))) {
                 delegate.audioPlaybackManagerRreadyToPlay(self)
-            }
-        }
-    }
-    
-    internal func respondPlayStatusDidChangeCallback() {
-        let noti = Notification(
-            name: AudioPlaybackManager.playStatusDidChangeNotification,
-            object: self,
-            userInfo: nil
-        )
-        NotificationCenter.default.post(noti)
-        
-        allDelegates().forEach { delegate in
-            if delegate.responds(to: #selector(delegate.audioPlaybackManager(_:playStatusDidChange:))) {
-                delegate.audioPlaybackManager(self, playStatusDidChange: playStatus)
             }
         }
     }

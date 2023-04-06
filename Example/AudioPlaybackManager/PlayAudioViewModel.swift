@@ -50,6 +50,7 @@ class PlayAudioViewModel: NSObject {
     deinit {
         NotificationCenter.default.removeObserver(self)
         
+        AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playStatus))
         AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playTime))
         AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.duration))
         AudioPlaybackManager.shared.removeObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.loadedTime))
@@ -142,6 +143,11 @@ extension PlayAudioViewModel {
     /// 针对当前 index.
     func pauseOrResume() {
         guard let playStatus = playStatus.value else {
+            // 当前 item 已设置 & 非自动播放时, 主动播放
+            if let _ = playIndex.value {
+                isForcePause = false
+                AudioPlaybackManager.shared.play()
+            }
             return
         }
 
@@ -161,7 +167,7 @@ extension PlayAudioViewModel {
             AudioPlaybackManager.shared.seekToProgress(0)
             AudioPlaybackManager.shared.play()
         case .stop, .error:
-            guard let index = playIndex.value, isValidIndex(index) else {
+            guard let index = playIndex.value else {
                 break
             }
             
@@ -232,13 +238,31 @@ extension PlayAudioViewModel {}
 extension PlayAudioViewModel {
     
     private func addKeyValueObserver() {
-        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playTime), options: NSKeyValueObservingOptions.new, context: nil)
-        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.duration), options: NSKeyValueObservingOptions.new, context: nil)
-        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.loadedTime), options: NSKeyValueObservingOptions.new, context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playStatus), options: [.old, .new], context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.playTime), options: [.new], context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.duration), options: [.new], context: nil)
+        AudioPlaybackManager.shared.addObserver(self, forKeyPath: #keyPath(AudioPlaybackManager.loadedTime), options: [.new], context: nil)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(AudioPlaybackManager.playTime) {
+        if keyPath == #keyPath(AudioPlaybackManager.playStatus) {
+            let oldKey = NSKeyValueChangeKey.oldKey
+            let newKey = NSKeyValueChangeKey.newKey
+            
+            if let oldStatus = change?[oldKey] as? Int,
+               let newStatus = change?[newKey] as? Int,
+               newStatus != oldStatus {
+                /// 切换状态
+                ///
+                /// 控制器监听到 finished 状态后, 若自动进行切歌操作, 就会触发即将播放音乐的 prepare 状态,
+                /// 此时会被 RX 判定为 sequence 中的上一个 event 未结束, 又添加进了新的 event,
+                /// 怀疑可能进入了循环, 而 log 警告。
+                /// 为避免产生警告, 这里统一处理为异步执行。
+                DispatchQueue.main.async {
+                    self.playStatus.accept(AudioPlaybackManager.PlayStatus(rawValue: newStatus))
+                }
+            }
+        } else if keyPath == #keyPath(AudioPlaybackManager.playTime) {
             if !isTracking {
                 playTime.accept(AudioPlaybackManager.shared.playTime)
             }
@@ -262,20 +286,6 @@ extension PlayAudioViewModel {
 
             if !self.isForcePause {
                 AudioPlaybackManager.shared.play()
-            }
-        }
-        
-        // Play status did change noti.
-        NotificationCenter.default.addObserver(forName: AudioPlaybackManager.playStatusDidChangeNotification, object: nil, queue: .main) { [weak self] noti in
-            guard let self = self else { return }
-
-            /// 切换状态
-            ///
-            /// 控制器监听到 finished 状态后, 自动进行切歌操作, 就会触发即将播放音乐的 prepare 状态,
-            /// 会 被 RX 判定为 sequence 中的上一个 event 未结束, 又添加进了新的 event,
-            /// 怀疑可能进入了循环, 而 log 警告。为避免产生警告, 因此这里统一处理为异步执行。
-            DispatchQueue.main.async {
-                self.playStatus.accept(AudioPlaybackManager.shared.playStatus)
             }
         }
         

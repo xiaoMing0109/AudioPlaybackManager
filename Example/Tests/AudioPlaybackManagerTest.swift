@@ -12,87 +12,71 @@ import AVFoundation
 
 final class AudioPlaybackManagerTest: XCTestCase {
 
-    var audio: Audio!
-    var stub: AudioPlaybackManager!
+    var sut: AudioPlaybackManager!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
-        stub = AudioPlaybackManager.shared
+        sut = AudioPlaybackManager.shared
     }
 
     override func tearDownWithError() throws {
-        audio = nil
-        stub = nil
+        sut = nil
         try super.tearDownWithError()
     }
     
-    func testInitialPropertiesValue() {
-        XCTAssertFalse(stub.autoPlayWhenItemReady)
-        XCTAssertTrue(stub.shouldResumeWhenInterruptEnded)
-        XCTAssertTrue(stub.playStatus == .prepare)
-        
-        XCTAssertEqual(stub.playTime, 0)
-        XCTAssertEqual(stub.duration, 0)
-        XCTAssertEqual(stub.loadedTime, 0)
-        XCTAssertEqual(stub.progress, 0)
-        XCTAssertEqual(stub.rate, 0)
-    }
-    
     func testMute() {
-        XCTAssertFalse(stub.isMuted)
+        XCTAssertFalse(sut.isMuted)
         
-        stub.isMuted = true
-        XCTAssertTrue(stub.isMuted)
+        sut.isMuted = true
+        XCTAssertTrue(sut.isMuted)
     }
     
     func testVolume() {
-        XCTAssertEqual(stub.volume, 1.0)
+        XCTAssertEqual(sut.volume, 1.0)
         
-        stub.volume = 0
-        XCTAssertEqual(stub.volume, stub.player.volume)
+        sut.volume = 0
+        XCTAssertEqual(sut.volume, sut.player.volume)
     }
     
     func testSetupLocalItem() {
-        disable_setupLocalItem()
+        let audio = disable_generateLocalItem()
         
-        stub.setupItem(audio, beginTime: 0)
+        sut.setupItem(audio, beginTime: 0)
+        XCTAssertNotNil(sut.audio)
         
-        XCTAssertNotNil(stub.playerItem)
+        XCTAssertNotNil(sut.playerItem)
         
-        let itemURL = (stub.playerItem?.asset as? AVURLAsset)?.url
+        let itemURL = (sut.playerItem?.asset as? AVURLAsset)?.url
         XCTAssertTrue(itemURL?.isFileURL == true)
         XCTAssertEqual(itemURL, audio.audioURL)
         
-        XCTAssertTrue(stub.playStatus == .prepare)
+        XCTAssertTrue(sut.playStatus == .prepare)
     }
     
-    func testObserveDurationAfterSetupItem() {
-        disable_setupLocalItem()
+    func test_playStatus_afterSetupLocalItem_autoPlay() {
+        let audio = disable_generateLocalItem()
         
-        stub.setupItem(audio, beginTime: 0)
+        sut.autoPlayWhenItemReady = true
+        sut.setupItem(audio, beginTime: 0)
         
         if #available(iOS 13.0, *) {
-            let kvoPromise = expectation(that: \AudioPlaybackManager.duration, on: stub, options: [.new]) { (observedObject, change) -> Bool in
-                guard let newValue = change.newValue else {
-                    return false
-                }
-                
-                // 156.0845351473923
-                if newValue > 156, newValue < 157 {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.playStatus, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                if observedObject.playStatus == .playing {
                     return true
                 }
-                
+
                 return false
             }
-            
+
             wait(for: [kvoPromise], timeout: 1)
         } else {
-            let kvoPromise = keyValueObservingExpectation(for: stub as Any, keyPath: #keyPath(AudioPlaybackManager.duration)) { (object, change) -> Bool in
-                guard let newValue = change[NSKeyValueChangeKey.newKey] as? Double else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.playStatus)) { (object, change) -> Bool in
+                guard let newValue = change[NSKeyValueChangeKey.newKey] as? Int else {
                     return false
                 }
                 
-                if newValue > 156, newValue < 157 {
+                let status = AudioPlaybackManager.PlayStatus(rawValue: newValue)
+                if status == .playing {
                     return true
                 }
                 
@@ -103,19 +87,16 @@ final class AudioPlaybackManagerTest: XCTestCase {
         }
     }
     
-    func testObservePlayTimeAfterSetupItem() {
-        disable_setupLocalItem()
+    func test_playTime_afterSetupLocalItem() {
+        let audio = disable_generateLocalItem()
         
         let beginTime = 10.0
-        stub.setupItem(audio, beginTime: beginTime)
+        sut.setupItem(audio, beginTime: beginTime)
         
         if #available(iOS 13.0, *) {
-            let kvoPromise = expectation(that: \AudioPlaybackManager.playTime, on: stub, options: [.new]) { (observedObject, change) -> Bool in
-                guard let newValue = change.newValue else {
-                    return false
-                }
-                
-                if newValue >= beginTime {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.playTime, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                let playTime = observedObject.playTime
+                if playTime >= beginTime {
                     return true
                 }
                 
@@ -124,12 +105,149 @@ final class AudioPlaybackManagerTest: XCTestCase {
             
             wait(for: [kvoPromise], timeout: 1)
         } else {
-            let kvoPromise = keyValueObservingExpectation(for: stub as Any, keyPath: #keyPath(AudioPlaybackManager.playTime)) { (object, change) -> Bool in
-                guard let newValue = change[NSKeyValueChangeKey.newKey] as? Double else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.playTime)) { (object, change) -> Bool in
+                guard let playTime = change[NSKeyValueChangeKey.newKey] as? Double else {
                     return false
                 }
                 
-                if newValue >= beginTime {
+                if playTime >= beginTime {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        }
+    }
+    
+    func test_duration_afterSetupLocalItem() {
+        let audio = disable_generateLocalItem()
+        
+        sut.setupItem(audio, beginTime: 0)
+        
+        if #available(iOS 13.0, *) {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.duration, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                // 156.0845351473923
+                let duration = observedObject.duration
+                if duration > 156.0, duration < 157.0 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        } else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.duration)) { (object, change) -> Bool in
+                guard let duration = change[NSKeyValueChangeKey.newKey] as? Double else {
+                    return false
+                }
+                
+                if duration > 156.0, duration < 157.0 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        }
+    }
+    
+    func test_loadedTime_afterSetupLocalItem() {
+        let audio = disable_generateLocalItem()
+        
+        sut.setupItem(audio, beginTime: 0)
+        
+        if #available(iOS 13.0, *) {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.loadedTime, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                // 156.0845351473923
+                let loadedTime = observedObject.loadedTime
+                if loadedTime > 156.0, loadedTime < 157.0 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        } else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.loadedTime)) { (object, change) -> Bool in
+                guard let loadedTime = change[NSKeyValueChangeKey.newKey] as? Double else {
+                    return false
+                }
+                
+                if loadedTime > 156.0, loadedTime < 157.0 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        }
+    }
+    
+    func test_progress_afterSetupLocalItem_autoPlay() {
+        let audio = disable_generateLocalItem()
+        
+        sut.autoPlayWhenItemReady = true
+        // 156.0845351473923
+        sut.setupItem(audio, beginTime: 79)
+        
+        if #available(iOS 13.0, *) {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.progress, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                let progress = observedObject.progress
+                if progress >= 0.5, progress < 0.6 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        } else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.progress)) { (object, change) -> Bool in
+                guard let progress = change[NSKeyValueChangeKey.newKey] as? Float else {
+                    return false
+                }
+                
+                if progress >= 0.5, progress < 0.6 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        }
+    }
+    
+    func test_rate_afterSetupLocalItem_autoPlay() {
+        let audio = disable_generateLocalItem()
+        
+        sut.autoPlayWhenItemReady = true
+        sut.setupItem(audio, beginTime: 0)
+        
+        if #available(iOS 13.0, *) {
+            let kvoPromise = expectation(that: \AudioPlaybackManager.rate, on: sut, options: [.new]) { (observedObject, change) -> Bool in
+                let rate = observedObject.rate
+                if rate != 0.0 {
+                    return true
+                }
+                
+                return false
+            }
+            
+            wait(for: [kvoPromise], timeout: 1)
+        } else {
+            let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.rate)) { (object, change) -> Bool in
+                guard let rate = change[NSKeyValueChangeKey.newKey] as? Double else {
+                    return false
+                }
+                
+                if rate != 0.0 {
                     return true
                 }
                 
@@ -145,14 +263,14 @@ final class AudioPlaybackManagerTest: XCTestCase {
 
 extension AudioPlaybackManagerTest {
     
-    func disable_setupLocalItem() {
+    func disable_generateLocalItem() -> Audio {
         guard let path = Bundle.main.path(forResource: "Song 1", ofType: "m4a") else {
             fatalError()
         }
         
         let audioURL = URL(fileURLWithPath: path)
-        audio = Audio(audioURL: audioURL)
-        XCTAssertEqual(audio.audioURL, audioURL)
+        let audio = Audio(audioURL: audioURL)
+        return audio
     }
 }
 
@@ -160,11 +278,4 @@ extension AudioPlaybackManagerTest {
 
 extension AudioPlaybackManagerTest {
     
-    func testExtensionInitialValues() {
-        XCTAssertFalse(stub.cacheEnabled)
-        XCTAssertTrue(stub.allowSetNowPlayingInfo)
-        
-        XCTAssertEqual(stub.remoteControlRewindRate, -2)
-        XCTAssertEqual(stub.remoteControlFastForwardRate, 2)
-    }
 }

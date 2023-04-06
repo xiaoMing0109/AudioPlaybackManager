@@ -20,7 +20,7 @@ open class AudioPlaybackManager: NSObject {
     @objc
     public static let shared = AudioPlaybackManager()
     
-    // MARK: Public Properties
+    // MARK: - Public Properties
     
     /// If true, auto play when item status is `readyToPlay`,
     /// otherwise, you can call `play()` when received noti
@@ -95,14 +95,9 @@ open class AudioPlaybackManager: NSObject {
     }
     
     /// The `playStatus` that the internal `AVPlayer` is in.
-    @objc
-    public private(set) var playStatus: PlayStatus = .prepare {
-        didSet {
-            guard playStatus != oldValue else { return }
-            
-            respondPlayStatusDidChangeCallback()
-        }
-    }
+    /// This is marked as `dynamic` so that this property can be observed using KVO.
+    @objc dynamic
+    public private(set) var playStatus: PlayStatus = .prepare
     
     /// The current play time in seconds.
     /// This is marked as `dynamic` so that this property can be observed using KVO.
@@ -129,7 +124,7 @@ open class AudioPlaybackManager: NSObject {
     @objc dynamic
     public private(set) var rate: Float = 0
     
-    // MARK: Internal Properties
+    // MARK: - Internal Properties
     
     internal let player = AVPlayer()
     
@@ -158,7 +153,7 @@ open class AudioPlaybackManager: NSObject {
     /// Record `setupItem(_:beginTime:)` item.
     internal private(set) var audio: Audio?
     
-    // MARK: Private Properties
+    // MARK: - Private Properties
     
     /// A periodic time observer to keep `playTime` and `progress` up to date.
     private var timeObserver: Any?
