@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		95D415EEF25900336164C6DC /* Pods_AudioPlaybackManager_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035F62A7D45E308D9599B6C5 /* Pods_AudioPlaybackManager_Example.framework */; };
+		BFB0336529DC25330009D5A1 /* AudioPlaybackManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */; };
 		BFD4EA3F29D58096000182BC /* PlayAudioControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA3929D58096000182BC /* PlayAudioControlView.xib */; };
 		BFD4EA4029D58096000182BC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3A29D58096000182BC /* Extensions.swift */; };
 		BFD4EA4229D58096000182BC /* PlayAudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */; };
@@ -55,6 +56,7 @@
 		8FE7D8DBD30C6E573DA934BD /* Pods_AudioPlaybackManager_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioPlaybackManager_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Tests/Pods-AudioPlaybackManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6C4FA1B44BF60FDCC0823C5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackManagerTest.swift; sourceTree = "<group>"; };
 		BFD4EA3929D58096000182BC /* PlayAudioControlView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayAudioControlView.xib; sourceTree = "<group>"; };
 		BFD4EA3A29D58096000182BC /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewModel.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */,
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -399,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				BFB0336529DC25330009D5A1 /* AudioPlaybackManagerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -223,12 +223,9 @@ extension AudioPlaybackManager {
     }
     
     internal func updatePlaybackMetadata() {
-        guard allowSetNowPlayingInfo else {
-            nowPlayingInfoCenter.nowPlayingInfo = nil
-            return
-        }
-        
-        guard let item = player.currentItem else {
+        guard allowSetNowPlayingInfo,
+              let item = player.currentItem
+        else {
             nowPlayingInfoCenter.nowPlayingInfo = nil
             return
         }
