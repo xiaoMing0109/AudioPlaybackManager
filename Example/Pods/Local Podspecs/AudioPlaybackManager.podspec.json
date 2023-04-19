@@ -1,9 +1,8 @@
 {
   "name": "AudioPlaybackManager",
   "version": "0.1.0",
-  "summary": "A short description of AudioPlaybackManager.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/LiuMing/AudioPlaybackManager",
+  "summary": "A audio playback manager.",
+  "homepage": "https://github.com/xiaoming0109/AudioPlaybackManager",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +11,7 @@
     "LiuMing": "liuming_0109@163.com"
   },
   "source": {
-    "git": "https://github.com/LiuMing/AudioPlaybackManager.git",
+    "git": "https://github.com/xiaoming0109/AudioPlaybackManager.git",
     "tag": "0.1.0"
   },
   "platforms": {

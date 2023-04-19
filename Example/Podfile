@@ -10,7 +10,6 @@ target 'AudioPlaybackManager_Example' do
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'QQCorner'
   
   target 'AudioPlaybackManager_Tests' do
     inherit! :search_paths

@@ -250,14 +250,14 @@ extension AudioPlaybackManager {
     }
     
     @objc
-    open func nextTrack() {
+    open func switchNext() {
         guard playerItem != nil else { return }
         
         respondNextTrackCallback()
     }
     
     @objc
-    open func previousTrack() {
+    open func switchPrevious() {
         guard playerItem != nil else { return }
         
         respondPreviousTrackCallback()
@@ -359,7 +359,7 @@ extension AudioPlaybackManager {
         
         guard time.isValid, time.isNumeric else {
             #if DEBUG
-            print("Seek time: \(time) is invalid or infinity!!!")
+            print(" [DEBUG] Seek time: \(time) is invalid or infinity!!!")
             #endif
             return
         }
@@ -383,7 +383,7 @@ extension AudioPlaybackManager {
         if keyPath == #keyPath(AVPlayer.currentItem) {
             let currentItem = player.currentItem
             #if DEBUG
-            print("Observe player item: \(String(describing: currentItem))")
+            print(" [DEBUG] Observe player item: \(String(describing: currentItem))")
             #endif
             
             if currentItem == nil {
@@ -394,7 +394,7 @@ extension AudioPlaybackManager {
         } else if keyPath == #keyPath(AVPlayer.rate) {
             let rate = player.rate
             #if DEBUG
-            print("Observe player rate: \(rate)")
+            print(" [DEBUG] Observe player rate: \(rate)")
             #endif
             
             self.rate = rate
@@ -406,7 +406,7 @@ extension AudioPlaybackManager {
             let status = playerItem.status
             let duration = CMTimeGetSeconds(playerItem.duration)
             #if DEBUG
-            print("Observe player item status: \(status), duration: \(duration)")
+            print(" [DEBUG] Observe player item status: \(status), duration: \(duration)")
             #endif
             
             switch status {
@@ -425,7 +425,7 @@ extension AudioPlaybackManager {
             
             let loadedTime = calculateLoadedTime(for: playerItem)
             #if DEBUG
-            print("Observe player item loaded time: \(loadedTime)")
+            print(" [DEBUG] Observe player item loaded time: \(loadedTime)")
             #endif
             
             self.loadedTime = loadedTime
@@ -462,7 +462,7 @@ extension AudioPlaybackManager {
         guard let playerItem = noti.object as? AVPlayerItem else { return }
         
         #if DEBUG
-        print("Player item did play to end time noti: \(noti)")
+        print(" [DEBUG] Player item did play to end time noti: \(noti)")
         #endif
         
         let duration = CMTimeGetSeconds(playerItem.duration)
@@ -476,7 +476,7 @@ extension AudioPlaybackManager {
         guard let userInfo = noti.userInfo else { return }
         
         #if DEBUG
-        print("Audio interruption noti: \(noti)")
+        print(" [DEBUG] Audio interruption noti: \(noti)")
         #endif
         
         if let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber,
@@ -502,7 +502,7 @@ extension AudioPlaybackManager {
         guard let userInfo = noti.userInfo else { return }
         
         #if DEBUG
-        print("Route change noti: \(noti)")
+        print(" [DEBUG] Route change noti: \(noti)")
         #endif
         
         guard let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? NSNumber,

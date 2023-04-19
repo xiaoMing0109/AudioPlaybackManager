@@ -11,14 +11,14 @@ import XCTest
 import AVFoundation
 
 final class AudioPlaybackManagerTest: XCTestCase {
-
+    
     var sut: AudioPlaybackManager!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
         sut = AudioPlaybackManager.shared
     }
-
+    
     override func tearDownWithError() throws {
         sut = nil
         try super.tearDownWithError()
@@ -52,6 +52,26 @@ final class AudioPlaybackManagerTest: XCTestCase {
         
         XCTAssertTrue(sut.playStatus == .prepare)
     }
+}
+
+// MARK: Disable
+
+extension AudioPlaybackManagerTest {
+    
+    func disable_generateLocalItem() -> Audio {
+        guard let path = Bundle.main.path(forResource: "Song 1", ofType: "m4a") else {
+            fatalError()
+        }
+        
+        let audioURL = URL(fileURLWithPath: path)
+        let audio = Audio(audioURL: audioURL)
+        return audio
+    }
+}
+
+// MARK: - Test KVO
+
+extension AudioPlaybackManagerTest {
     
     func test_playStatus_afterSetupLocalItem_autoPlay() {
         let audio = disable_generateLocalItem()
@@ -64,10 +84,10 @@ final class AudioPlaybackManagerTest: XCTestCase {
                 if observedObject.playStatus == .playing {
                     return true
                 }
-
+                
                 return false
             }
-
+            
             wait(for: [kvoPromise], timeout: 1)
         } else {
             let kvoPromise = keyValueObservingExpectation(for: sut as Any, keyPath: #keyPath(AudioPlaybackManager.playStatus)) { (object, change) -> Bool in
@@ -130,7 +150,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
             let kvoPromise = expectation(that: \AudioPlaybackManager.duration, on: sut, options: [.new]) { (observedObject, change) -> Bool in
                 // 156.0845351473923
                 let duration = observedObject.duration
-                if duration > 156.0, duration < 157.0 {
+                if (156.0 ..< 157.0) ~= duration {
                     return true
                 }
                 
@@ -144,7 +164,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
                     return false
                 }
                 
-                if duration > 156.0, duration < 157.0 {
+                if (156.0 ..< 157.0) ~= duration {
                     return true
                 }
                 
@@ -164,7 +184,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
             let kvoPromise = expectation(that: \AudioPlaybackManager.loadedTime, on: sut, options: [.new]) { (observedObject, change) -> Bool in
                 // 156.0845351473923
                 let loadedTime = observedObject.loadedTime
-                if loadedTime > 156.0, loadedTime < 157.0 {
+                if (156.0 ..< 157.0) ~= loadedTime {
                     return true
                 }
                 
@@ -178,7 +198,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
                     return false
                 }
                 
-                if loadedTime > 156.0, loadedTime < 157.0 {
+                if (156.0 ..< 157.0) ~= loadedTime {
                     return true
                 }
                 
@@ -199,7 +219,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
         if #available(iOS 13.0, *) {
             let kvoPromise = expectation(that: \AudioPlaybackManager.progress, on: sut, options: [.new]) { (observedObject, change) -> Bool in
                 let progress = observedObject.progress
-                if progress >= 0.5, progress < 0.6 {
+                if (0.5 ..< 0.6) ~= progress {
                     return true
                 }
                 
@@ -213,7 +233,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
                     return false
                 }
                 
-                if progress >= 0.5, progress < 0.6 {
+                if (0.5 ..< 0.6) ~= progress {
                     return true
                 }
                 
@@ -259,23 +279,111 @@ final class AudioPlaybackManagerTest: XCTestCase {
     }
 }
 
-// MARK: - Generate Audio
+// MARK: - Test Notification
 
 extension AudioPlaybackManagerTest {
     
-    func disable_generateLocalItem() -> Audio {
-        guard let path = Bundle.main.path(forResource: "Song 1", ofType: "m4a") else {
-            fatalError()
+    func test_readyToPlayNotification() {
+        // expect
+        let notificationPromise = expectation(forNotification: AudioPlaybackManager.readyToPlayNotification, object: nil) { _ -> Bool in
+            let duration = self.sut.duration
+            if (156.0 ..< 157.0) ~= duration {
+                return true
+            }
+            
+            return false
         }
         
-        let audioURL = URL(fileURLWithPath: path)
-        let audio = Audio(audioURL: audioURL)
-        return audio
+        // when
+        let audio = disable_generateLocalItem()
+        sut.setupItem(audio, beginTime: 0)
+        
+        // then
+        wait(for: [notificationPromise], timeout: 1)
+    }
+    
+    func test_switchNextNotification() {
+        // given
+        sut.player.replaceCurrentItem(with: nil)
+        
+        let audio = disable_generateLocalItem()
+        sut.setupItem(audio, beginTime: 0)
+        
+        // expect
+        let notificationPromise = expectation(forNotification: AudioPlaybackManager.nextTrackNotification, object: nil) { _ -> Bool in
+            return true
+        }
+        
+        // when
+        sut.switchNext()
+        
+        // then
+        wait(for: [notificationPromise], timeout: 1)
+    }
+    
+    func test_switchNext_doseNotReceiveNotification_whenPlayerItemIsNil() {
+        // given
+        sut.player.replaceCurrentItem(with: nil)
+
+        // expect
+        let notificationPromise = expectation(forNotification: AudioPlaybackManager.nextTrackNotification, object: nil) { _ -> Bool in
+            return true
+        }
+
+        // when
+        sut.switchNext()
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+            notificationPromise.fulfill()
+        }
+
+        wait(for: [notificationPromise], timeout: 1)
+    }
+    
+    func test_switchPreviousNotification() {
+        // given
+        sut.player.replaceCurrentItem(with: nil)
+        
+        let audio = disable_generateLocalItem()
+        sut.setupItem(audio, beginTime: 0)
+        
+        // expect
+        let notificationPromise = expectation(forNotification: AudioPlaybackManager.previousTrackNotification, object: nil) { _ -> Bool in
+            return true
+        }
+        
+        // when
+        sut.switchPrevious()
+        
+        // then
+        wait(for: [notificationPromise], timeout: 1)
+    }
+    
+    func test_switchPrevious_doseNotReceiveNotification_whenPlayerItemIsNil() {
+        // given
+        sut.player.replaceCurrentItem(with: nil)
+
+        // expect
+        let notificationPromise = expectation(forNotification: AudioPlaybackManager.previousTrackNotification, object: nil) { _ -> Bool in
+            return true
+        }
+
+        // when
+        sut.switchPrevious()
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+            notificationPromise.fulfill()
+        }
+
+        wait(for: [notificationPromise], timeout: 1)
     }
 }
 
-// MARK: - Test Extensions
+// MARK: - Test Delegate
 
-extension AudioPlaybackManagerTest {
+extension AudioPlaybackManagerTest: AudioPlaybackManagerDelegate {
+    
     
 }

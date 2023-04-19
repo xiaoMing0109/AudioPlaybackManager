@@ -208,7 +208,7 @@ extension AudioPlaybackManager {
     
     @objc private func handleNextTrackCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         if playerItem != nil {
-            nextTrack()
+            switchNext()
 
             return .success
         } else {
@@ -218,7 +218,7 @@ extension AudioPlaybackManager {
     
     @objc private func handlePreviousTrackCommandEvent(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         if playerItem != nil {
-            previousTrack()
+            switchPrevious()
 
             return .success
         } else {

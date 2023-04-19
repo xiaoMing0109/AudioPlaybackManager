@@ -8,7 +8,6 @@
 import UIKit
 import RxSwift
 import MediaPlayer
-import QQCorner
 import SnapKit
 
 class PlayAudioControlView: UIView {
@@ -123,10 +122,15 @@ class PlayAudioControlView: UIView {
         view.showsVolumeSlider = true
         view.setVolumeThumbImage(volumeSliderThumbImage, for: .normal)
         view.setVolumeThumbImage(volumeSliderThumbImage, for: .highlighted)
+        
         var minimumTrackImage: UIImage? {
-            var image = UIImage(color: UIColor(hexString: "#33A6B9"),
-                                size: CGSize(width: 6, height: 6),
-                                cornerRadius: QQRadiusMakeSame(3))
+            let view = UIView(
+                frame: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))
+            )
+            view.backgroundColor = UIColor("#33A6B9")
+            view.layer.cornerRadius = 3
+            
+            var image = view.toImage
             image = image?.resizableImage(
                 withCapInsets: .init(top: 3, left: 3, bottom: 3, right: 3),
                 resizingMode: .stretch
@@ -134,10 +138,15 @@ class PlayAudioControlView: UIView {
             return image
         }
         view.setMinimumVolumeSliderImage(minimumTrackImage, for: .normal)
+        
         var maximumTrackImage: UIImage? {
-            var image = UIImage(color: UIColor(hexString: "#33A6B9", alpha: 0.2),
-                                size: CGSize(width: 6, height: 6),
-                                cornerRadius: QQRadiusMakeSame(3))
+            let view = UIView(
+                frame: CGRect(origin: .zero, size: CGSize(width: 6, height: 6))
+            )
+            view.backgroundColor = UIColor(hexString: "#33A6B9", alpha: 0.2)
+            view.layer.cornerRadius = 3
+            
+            var image = view.toImage
             image = image?.resizableImage(
                 withCapInsets: .init(top: 3, left: 3, bottom: 3, right: 3),
                 resizingMode: .stretch
@@ -145,6 +154,7 @@ class PlayAudioControlView: UIView {
             return image
         }
         view.setMaximumVolumeSliderImage(maximumTrackImage, for: .normal)
+        
         return view
     }()
     
