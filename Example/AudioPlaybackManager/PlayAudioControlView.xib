@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2wS-L2-gYX">
-                    <rect key="frame" x="50" y="-4" width="284" height="30"/>
+                    <rect key="frame" x="50" y="-38" width="284" height="30"/>
                     <subviews>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LkM-IE-64M">
                             <rect key="frame" x="-2" y="0.0" width="288" height="31"/>
@@ -36,7 +36,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0do-4z-ah3">
-                    <rect key="frame" x="50" y="46" width="284" height="50"/>
+                    <rect key="frame" x="50" y="12" width="284" height="50"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VjQ-kz-gtZ">
                             <rect key="frame" x="0.0" y="0.0" width="35.5" height="50"/>
@@ -57,13 +57,13 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gp1-Gp-ly8">
-                    <rect key="frame" x="49" y="131" width="286" height="60"/>
+                    <rect key="frame" x="49" y="97" width="286" height="60"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omm-K5-aOt">
                             <rect key="frame" x="0.0" y="13" width="34" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="meditation_player_backward"/>
-                            <state key="disabled" image="meditation_player_backward.disable"/>
+                            <state key="normal" image="player_backward"/>
+                            <state key="disabled" image="player_backward.disable"/>
                             <connections>
                                 <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Nwk-D0-1FB"/>
                             </connections>
@@ -78,8 +78,8 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WFY-5R-XZS">
                             <rect key="frame" x="54" y="13" width="34" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="meditation_player_previous"/>
-                            <state key="disabled" image="meditation_player_previous.disable"/>
+                            <state key="normal" image="player_previous"/>
+                            <state key="disabled" image="player_previous.disable"/>
                             <connections>
                                 <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Exz-7N-4kh"/>
                             </connections>
@@ -94,7 +94,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0np-wh-OQ7">
                             <rect key="frame" x="113" y="0.0" width="60" height="60"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="meditation_player_play"/>
+                            <state key="normal" image="player_play"/>
                             <connections>
                                 <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="lZ0-dQ-Sc5"/>
                             </connections>
@@ -109,8 +109,8 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqc-m2-6Ze">
                             <rect key="frame" x="198" y="13" width="34" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="meditation_player_next"/>
-                            <state key="disabled" image="meditation_player_next.disable"/>
+                            <state key="normal" image="player_next"/>
+                            <state key="disabled" image="player_next.disable"/>
                             <connections>
                                 <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="0b1-Tt-bhe"/>
                             </connections>
@@ -125,8 +125,8 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cXz-ob-cam">
                             <rect key="frame" x="252" y="13" width="34" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="meditation_player_forward"/>
-                            <state key="disabled" image="meditation_player_forward.disable"/>
+                            <state key="normal" image="player_forward"/>
+                            <state key="disabled" image="player_forward.disable"/>
                             <connections>
                                 <action selector="onClickedButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="lVU-Xl-7ji"/>
                             </connections>
@@ -134,7 +134,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="TRH-c6-rQY">
-                    <rect key="frame" x="50" y="226" width="284" height="24"/>
+                    <rect key="frame" x="50" y="192" width="284" height="24"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="gJ6-S4-XmL"/>
                     </constraints>
@@ -171,14 +171,14 @@
         </view>
     </objects>
     <resources>
-        <image name="meditation_player_backward" width="34" height="34"/>
-        <image name="meditation_player_backward.disable" width="34" height="34"/>
-        <image name="meditation_player_forward" width="34" height="34"/>
-        <image name="meditation_player_forward.disable" width="34" height="34"/>
-        <image name="meditation_player_next" width="34" height="34"/>
-        <image name="meditation_player_next.disable" width="34" height="34"/>
-        <image name="meditation_player_play" width="60" height="60"/>
-        <image name="meditation_player_previous" width="34" height="34"/>
-        <image name="meditation_player_previous.disable" width="34" height="34"/>
+        <image name="player_backward" width="34" height="34"/>
+        <image name="player_backward.disable" width="34" height="34"/>
+        <image name="player_forward" width="34" height="34"/>
+        <image name="player_forward.disable" width="34" height="34"/>
+        <image name="player_next" width="34" height="34"/>
+        <image name="player_next.disable" width="34" height="34"/>
+        <image name="player_play" width="60" height="60"/>
+        <image name="player_previous" width="34" height="34"/>
+        <image name="player_previous.disable" width="34" height="34"/>
     </resources>
 </document>

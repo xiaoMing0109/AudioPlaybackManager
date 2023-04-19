@@ -90,6 +90,14 @@ class PlayAudioViewController: UIViewController {
         AudioPlaybackManager.shared.setActiveSession(false)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if #available(iOS 13.0, *) {
+            return .darkContent
+        } else {
+            return .default
+        }
+    }
+    
 // MARK: Setup Subviews
     private func setupSubviews() {
         view.backgroundColor = .white

@@ -2,7 +2,7 @@
 //  AudioPlaybackManagerTest.swift
 //  AudioPlaybackManager_Tests
 //
-//  Created by 怦然心动-LM on 2023/4/4.
+//  Created by LM on 2023/4/4.
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 

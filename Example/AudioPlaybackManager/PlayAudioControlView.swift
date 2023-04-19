@@ -79,10 +79,10 @@ class PlayAudioControlView: UIView {
     }
     
     private func setupControlButtons() {
-        playButton.setImage(UIImage(named: "meditation_player_play"), for: .normal)
-        playButton.setImage(UIImage(named: "meditation_player_play"), for: .highlighted)
-        playButton.setImage(UIImage(named: "meditation_player_pause"), for: .selected)
-        playButton.setImage(UIImage(named: "meditation_player_pause"), for: [.selected, .highlighted])
+        playButton.setImage(UIImage(named: "player_play"), for: .normal)
+        playButton.setImage(UIImage(named: "player_play"), for: .highlighted)
+        playButton.setImage(UIImage(named: "player_pause"), for: .selected)
+        playButton.setImage(UIImage(named: "player_pause"), for: [.selected, .highlighted])
         
         addSubview(loadingButton)
         startLoadingAnimation()
@@ -90,7 +90,7 @@ class PlayAudioControlView: UIView {
     
     private lazy var loadingButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setBackgroundImage(UIImage(named: "meditation_player_loading"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "player_loading"), for: .normal)
         button.isUserInteractionEnabled = false
         button.isHidden = true// Default hidden.
         return button
@@ -105,14 +105,14 @@ class PlayAudioControlView: UIView {
     private lazy var volumeDownImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.image = UIImage(named: "meditation_player_volume.down")
+        view.image = UIImage(named: "player_volume.down")
         return view
     }()
     
     private lazy var volumeUpImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.image = UIImage(named: "meditation_player_volume.up")
+        view.image = UIImage(named: "player_volume.up")
         return view
     }()
     
