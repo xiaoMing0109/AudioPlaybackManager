@@ -205,7 +205,7 @@ extension AudioPlaybackManager {
         if !url.isFileURL, cacheEnabled {
             playerItem = generateCachePlayerItem(withURL: url)
         } else {
-            playerItem = AVPlayerItem(url: url)
+            playerItem = AVPlayerItem(asset: AVAsset(url: url))
         }
         player.replaceCurrentItem(with: playerItem)
         

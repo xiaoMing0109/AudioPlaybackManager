@@ -380,10 +380,3 @@ extension AudioPlaybackManagerTest {
         wait(for: [notificationPromise], timeout: 1)
     }
 }
-
-// MARK: - Test Delegate
-
-extension AudioPlaybackManagerTest: AudioPlaybackManagerDelegate {
-    
-    
-}

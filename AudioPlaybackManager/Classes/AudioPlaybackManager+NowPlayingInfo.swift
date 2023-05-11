@@ -59,38 +59,21 @@ extension AudioPlaybackManager {
         
         if audio.useAudioMetadata {
             let asset = item.asset
+            let metadataItems = asset.commonMetadata
             
             let titleKey = AVMetadataKey.commonKeyTitle
             let albumNameKey = AVMetadataKey.commonKeyAlbumName
             let artistKey = AVMetadataKey.commonKeyArtist
             
-            if #available(iOS 15.0, *) {
-                asset.loadMetadata(for: .iTunesMetadata) { [weak self] metadataItems, error in
-                    guard let self = self, let metadataItems = metadataItems else { return }
-                    
-                    let title = self.acquireMetadataItem(from: metadataItems, withKey: titleKey) as? String
-                    let album = self.acquireMetadataItem(from: metadataItems, withKey: albumNameKey) as? String
-                    let artist = self.acquireMetadataItem(from: metadataItems, withKey: artistKey) as? String
-                    
-                    nowPlayingInfo[MPMediaItemPropertyTitle] = title
-                    nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
-                    nowPlayingInfo[MPMediaItemPropertyArtist] = artist
-                    
-                    self.nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-                }
-            } else {
-                let metadataItems = asset.commonMetadata
-                
-                let title = self.acquireMetadataItem(from: metadataItems, withKey: titleKey) as? String
-                let album = self.acquireMetadataItem(from: metadataItems, withKey: albumNameKey) as? String
-                let artist = self.acquireMetadataItem(from: metadataItems, withKey: artistKey) as? String
-                
-                nowPlayingInfo[MPMediaItemPropertyTitle] = title
-                nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
-                nowPlayingInfo[MPMediaItemPropertyArtist] = artist
-                
-                nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-            }
+            let title = self.acquireMetadataItem(from: metadataItems, withKey: titleKey) as? String
+            let album = self.acquireMetadataItem(from: metadataItems, withKey: albumNameKey) as? String
+            let artist = self.acquireMetadataItem(from: metadataItems, withKey: artistKey) as? String
+            
+            nowPlayingInfo[MPMediaItemPropertyTitle] = title
+            nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
+            nowPlayingInfo[MPMediaItemPropertyArtist] = artist
+            
+            nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
         } else {
             nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = audio.albumName
             nowPlayingInfo[MPMediaItemPropertyArtist] = audio.artist
@@ -115,50 +98,25 @@ extension AudioPlaybackManager {
         
         if audio.useAudioMetadata {
             let asset = item.asset
+            let metadataItems = asset.commonMetadata
             
             let artworkKey = AVMetadataKey.commonKeyArtwork
             
-            if #available(iOS 15.0, *) {
-                asset.loadMetadata(for: .iTunesMetadata) { [weak self] metadataItems, error in
-                    guard let self = self, let metadataItems = metadataItems else { return }
-                    
-                    DispatchQueue.global().async {
-                        var artwork: MPMediaItemArtwork? {
-                            if let artworkData = self.acquireMetadataItem(from: metadataItems, withKey: artworkKey) as? Data,
-                               let image = UIImage(data: artworkData) {
-                                return MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                    return image
-                                }
-                            } else {
-                                return nil
-                            }
+            DispatchQueue.global().async {
+                var artwork: MPMediaItemArtwork? {
+                    if let artworkData = self.acquireMetadataItem(from: metadataItems, withKey: artworkKey) as? Data,
+                       let image = UIImage(data: artworkData) {
+                        return MPMediaItemArtwork(boundsSize: image.size) { _ in
+                            return image
                         }
-                        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-                        
-                        DispatchQueue.main.async {
-                            self.nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-                        }
+                    } else {
+                        return nil
                     }
                 }
-            } else {
-                let metadataItems = asset.commonMetadata
+                nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
                 
-                DispatchQueue.global().async {
-                    var artwork: MPMediaItemArtwork? {
-                        if let artworkData = self.acquireMetadataItem(from: metadataItems, withKey: artworkKey) as? Data,
-                           let image = UIImage(data: artworkData) {
-                            return MPMediaItemArtwork(boundsSize: image.size) { _ in
-                                return image
-                            }
-                        } else {
-                            return nil
-                        }
-                    }
-                    nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-                    
-                    DispatchQueue.main.async {
-                        self.nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-                    }
+                DispatchQueue.main.async {
+                    self.nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
                 }
             }
         } else {

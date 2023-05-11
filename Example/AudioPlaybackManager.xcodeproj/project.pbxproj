@@ -250,13 +250,14 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = KX2CL79DNK;
+						DevelopmentTeam = QW7324TCJY;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = KX2CL79DNK;
+						DevelopmentTeam = QW7324TCJY;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -538,7 +539,7 @@
 			baseConfigurationReference = 470614238E00E7F90253582D /* Pods-AudioPlaybackManager_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KX2CL79DNK;
+				DEVELOPMENT_TEAM = QW7324TCJY;
 				INFOPLIST_FILE = AudioPlaybackManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -555,7 +556,7 @@
 			baseConfigurationReference = E7EE6BB3364FBE6D4EF88933 /* Pods-AudioPlaybackManager_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KX2CL79DNK;
+				DEVELOPMENT_TEAM = QW7324TCJY;
 				INFOPLIST_FILE = AudioPlaybackManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -571,7 +572,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = KX2CL79DNK;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QW7324TCJY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -585,6 +588,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlaybackManager_Example.app/AudioPlaybackManager_Example";
@@ -595,7 +599,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4E0C325598582C972D19CE7E /* Pods-AudioPlaybackManager_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = KX2CL79DNK;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QW7324TCJY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -605,6 +611,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlaybackManager_Example.app/AudioPlaybackManager_Example";
