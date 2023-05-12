@@ -12,6 +12,10 @@ open class Audio: NSObject {
     /// Audio url.
     open var audioURL: URL
     
+    public init(audioURL: URL) {
+        self.audioURL = audioURL
+    }
+    
     /// -------------- `MPNowPlayingInfoCenter` --------------
     
     /// Set `nowPlayingInfo` using audio metadata.
@@ -31,8 +35,4 @@ open class Audio: NSObject {
     /// Artwork.
     open var artworkImage: UIImage?
     open var artworkURL: URL?
-    
-    public init(audioURL: URL) {
-        self.audioURL = audioURL
-    }
 }
