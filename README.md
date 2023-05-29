@@ -27,3 +27,7 @@ LiuMing, liuming_0109@163.com
 ## License
 
 AudioPlaybackManager is available under the MIT license. See the LICENSE file for more info.
+
+## 中文文档
+
+https://juejin.cn/post/7232256083875430461
