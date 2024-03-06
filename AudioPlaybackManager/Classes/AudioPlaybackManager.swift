@@ -20,11 +20,10 @@ open class AudioPlaybackManager: NSObject {
     @objc
     public static let shared = AudioPlaybackManager()
     
-    // MARK: - Public Properties
+    // MARK: Public Properties
     
     /// If true, auto play when item status is `readyToPlay`,
-    /// otherwise, you can call `play()` when received noti
-    /// `readyToPlay`.
+    /// otherwise, you can call `play()` when received noti `readyToPlay`.
     @objc
     open var autoPlayWhenItemReady = false
     
@@ -95,36 +94,58 @@ open class AudioPlaybackManager: NSObject {
     }
     
     /// The `playStatus` that the internal `AVPlayer` is in.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var playStatus: PlayStatus = .prepare
     
     /// The current play time in seconds.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var playTime: Float64 = 0
     
     /// The total duration in seconds.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var duration: Float64 = 0
     
     /// The loaded time ranges in seconds.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var loadedTime: Float64 = 0
     
     /// The progress for the playback.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var progress: Float = 0
     
     /// The rate for the player.
+    ///
     /// This is marked as `dynamic` so that this property can be observed using KVO.
     @objc dynamic
     public private(set) var rate: Float = 0
     
-    // MARK: - Internal Properties
+    /// The logger state.
+    @objc
+    open var logEnabled: Bool = true {
+        didSet {
+            logger.enabled = logEnabled
+        }
+    }
+    
+    /// The log severity level.
+    @objc
+    open var logLevel: LogLevel = .info {
+        didSet {
+            logger.minLevel = logLevel
+        }
+    }
+    
+    // MARK: Internal Properties
     
     internal let player = AVPlayer()
     
@@ -153,7 +174,10 @@ open class AudioPlaybackManager: NSObject {
     /// Record `setupItem(_:beginTime:)` item.
     internal private(set) var audio: Audio?
     
-    // MARK: - Private Properties
+    /// The logger.
+    internal lazy var logger = AudioLogger()
+    
+    // MARK: Private Properties
     
     /// A periodic time observer to keep `playTime` and `progress` up to date.
     private var timeObserver: Any?
@@ -358,9 +382,7 @@ extension AudioPlaybackManager {
         guard player.currentItem != nil else { return }
         
         guard time.isValid, time.isNumeric else {
-            #if DEBUG
-            print(" [DEBUG] Seek time: \(time) is invalid or infinity!!!")
-            #endif
+            logger.warning(" [DEBUG] Seek time: \(time) is invalid or infinity!!!")
             return
         }
         
@@ -382,9 +404,7 @@ extension AudioPlaybackManager {
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(AVPlayer.currentItem) {
             let currentItem = player.currentItem
-            #if DEBUG
-            print(" [DEBUG] Observe player item: \(String(describing: currentItem))")
-            #endif
+            logger.info(" [DEBUG] Observe player item: \(String(describing: currentItem))")
             
             if currentItem == nil {
                 playerItem = nil
@@ -393,9 +413,7 @@ extension AudioPlaybackManager {
             setNowPlayingInfo()
         } else if keyPath == #keyPath(AVPlayer.rate) {
             let rate = player.rate
-            #if DEBUG
-            print(" [DEBUG] Observe player rate: \(rate)")
-            #endif
+            logger.info(" [DEBUG] Observe player rate: \(rate)")
             
             self.rate = rate
             
@@ -405,9 +423,7 @@ extension AudioPlaybackManager {
             
             let status = playerItem.status
             let duration = CMTimeGetSeconds(playerItem.duration)
-            #if DEBUG
-            print(" [DEBUG] Observe player item status: \(status), duration: \(duration)")
-            #endif
+            logger.info(" [DEBUG] Observe player item status: \(status), duration: \(duration)")
             
             switch status {
             case .unknown: break
@@ -424,9 +440,7 @@ extension AudioPlaybackManager {
             guard let playerItem = object as? AVPlayerItem else { return }
             
             let loadedTime = calculateLoadedTime(for: playerItem)
-            #if DEBUG
-            print(" [DEBUG] Observe player item loaded time: \(loadedTime)")
-            #endif
+            logger.info(" [DEBUG] Observe player item loaded time: \(loadedTime)")
             
             self.loadedTime = loadedTime
         } else {
@@ -460,10 +474,7 @@ extension AudioPlaybackManager {
     
     @objc private func playerItemDidPlayToEndTime(_ noti: NSNotification) {
         guard let playerItem = noti.object as? AVPlayerItem else { return }
-        
-        #if DEBUG
-        print(" [DEBUG] Player item did play to end time noti: \(noti)")
-        #endif
+        logger.info(" [DEBUG] Player item did play to end time noti: \(noti)")
         
         let duration = CMTimeGetSeconds(playerItem.duration)
         // Sync play time to end time.
@@ -474,10 +485,7 @@ extension AudioPlaybackManager {
     
     @objc private func sessionInterruption(_ noti: NSNotification) {
         guard let userInfo = noti.userInfo else { return }
-        
-        #if DEBUG
-        print(" [DEBUG] Audio interruption noti: \(noti)")
-        #endif
+        logger.info(" [DEBUG] Audio interruption noti: \(noti)")
         
         if let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber,
            let type = AVAudioSession.InterruptionType(rawValue: typeValue.uintValue) {
@@ -500,10 +508,7 @@ extension AudioPlaybackManager {
     
     @objc private func routeChange(_ noti: NSNotification) {
         guard let userInfo = noti.userInfo else { return }
-        
-        #if DEBUG
-        print(" [DEBUG] Route change noti: \(noti)")
-        #endif
+        logger.info(" [DEBUG] Route change noti: \(noti)")
         
         guard let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? NSNumber,
               let reason = AVAudioSession.RouteChangeReason(rawValue: value.uintValue)

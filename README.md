@@ -31,3 +31,10 @@ AudioPlaybackManager is available under the MIT license. See the LICENSE file fo
 ## 中文文档
 
 https://juejin.cn/post/7232256083875430461
+
+## Updates
+
+| Version | Detail                                                       |
+| ------- | ------------------------------------------------------------ |
+| 0.1.0   | Basic                                                        |
+| 0.2.0   | 1. Add logger control.<br />2. Update method `setActiveSession()`, you can see the detail in the demo. <br />3. `allowSetNowPlayingInfo` default value change to `false`. |

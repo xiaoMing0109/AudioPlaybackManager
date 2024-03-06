@@ -10,6 +10,7 @@ target 'AudioPlaybackManager_Example' do
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'VIMediaCache', :git => 'https://github.com/vitoziv/VIMediaCache.git'
   
   target 'AudioPlaybackManager_Tests' do
     inherit! :search_paths

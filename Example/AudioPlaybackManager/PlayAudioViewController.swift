@@ -40,10 +40,13 @@ class PlayAudioViewController: UIViewController {
         addSubscribe()
         
         // 后台 + 设备静音模式 可播放
-        AudioPlaybackManager.shared.setActiveSession(true)
+        AudioPlaybackManager.shared.setActiveSession(true, activeOptions: [.notifyOthersOnDeactivation])
         
         // Cache enable for network url.
         AudioPlaybackManager.shared.cacheEnabled = true
+        
+        // Allow show playing info in the background.
+        AudioPlaybackManager.shared.allowSetNowPlayingInfo = true
         
         // Remote control commands.
         AudioPlaybackManager.shared.activatePlaybackCommands(true)
@@ -52,6 +55,10 @@ class PlayAudioViewController: UIViewController {
         AudioPlaybackManager.shared.activateSeekBackwardCommand(true)
         AudioPlaybackManager.shared.activateSeekForwardCommand(true)
         AudioPlaybackManager.shared.activateChangePlaybackPositionCommand(true)
+        
+        // Log enable.
+        AudioPlaybackManager.shared.logEnabled = true
+        AudioPlaybackManager.shared.logLevel = .info
         
         viewModel.playAudio(at: defaultPlayIndex)
     }
@@ -87,7 +94,7 @@ class PlayAudioViewController: UIViewController {
     deinit {
         viewModel.stopPlay()
         AudioPlaybackManager.shared.deactivateAllRemoteCommands()
-        AudioPlaybackManager.shared.setActiveSession(false)
+        AudioPlaybackManager.shared.setActiveSession(false, activeOptions: [.notifyOthersOnDeactivation])
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

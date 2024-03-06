@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     private lazy var audioURLs: [URL] = {
         var URLs: [URL] = []
+        
         if let enumerator = FileManager.default.enumerator(
             at: Bundle.main.bundleURL,
             includingPropertiesForKeys: nil,
@@ -33,6 +34,7 @@ class ViewController: UIViewController {
                 URLs.append(url)
             }
         }
+        
         return URLs
     }()
     

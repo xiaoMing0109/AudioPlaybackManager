@@ -7,8 +7,6 @@
 import Foundation
 import AVFoundation
 
-// MARK: - Active Session
-
 extension AudioPlaybackManager {
     
     /// Set the audio session as active/inactive.
@@ -19,15 +17,19 @@ extension AudioPlaybackManager {
     ///
     /// - Note: It is recommended to turn it on before starting to play, and turn it off when you don't need to play at all.
     @objc
-    open func setActiveSession(_ enabled: Bool) {
+    open func setActiveSession(
+        _ enabled: Bool,
+        category: AVAudioSession.Category = .playback,
+        mode: AVAudioSession.Mode = .default,
+        categoryOptions: AVAudioSession.CategoryOptions = [],
+        activeOptions: AVAudioSession.SetActiveOptions = []
+    ) {
         do {
             let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playback, mode: .default)
-            try session.setActive(enabled, options: .notifyOthersOnDeactivation)
+            try session.setCategory(category, mode: mode, options: categoryOptions)
+            try session.setActive(enabled, options: activeOptions)
         } catch {
-            #if DEBUG
-            print(error)
-            #endif
+            logger.error(" [DEBUG] Active session error: \(error)")
         }
     }
 }

@@ -12,18 +12,17 @@ extension AudioPlaybackManager {
     private struct AssociatedKeys {
         static var nowPlayingInfoCenterKey: Void?
         static var allowSetNowPlayingInfoKey: Void?
-        static var resizedImageSizeKey: Void?
     }
     
     // MARK: Public Properties
     
     /// Allows to set background playback display information.
     ///
-    /// Default is `true`.
+    /// Default is `false`.
     @objc
     open var allowSetNowPlayingInfo: Bool {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey) as? Bool ?? true
+            return objc_getAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey) as? Bool ?? false
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.allowSetNowPlayingInfoKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

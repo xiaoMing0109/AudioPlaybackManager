@@ -1,12 +1,12 @@
 PODS:
   - AudioPlaybackManager (0.1.0):
     - VIMediaCache (~> 0.4)
-  - RxCocoa (6.5.0):
-    - RxRelay (= 6.5.0)
-    - RxSwift (= 6.5.0)
-  - RxRelay (6.5.0):
-    - RxSwift (= 6.5.0)
-  - RxSwift (6.5.0)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
   - SnapKit (5.6.0)
   - VIMediaCache (0.4)
 
@@ -15,6 +15,7 @@ DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SnapKit
+  - VIMediaCache (from `https://github.com/vitoziv/VIMediaCache.git`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -22,21 +23,26 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SnapKit
-  trunk:
-    - VIMediaCache
 
 EXTERNAL SOURCES:
   AudioPlaybackManager:
     :path: "../"
+  VIMediaCache:
+    :git: https://github.com/vitoziv/VIMediaCache.git
+
+CHECKOUT OPTIONS:
+  VIMediaCache:
+    :commit: b9c4564d2eda0d1bc6d218bfd7582d2e5e76bbab
+    :git: https://github.com/vitoziv/VIMediaCache.git
 
 SPEC CHECKSUMS:
   AudioPlaybackManager: 6d5a30182e01a726823b39539574293a581223be
-  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
-  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
-  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   VIMediaCache: aa650f82cb114c68a343beb4e67416cf5eb2f3a2
 
-PODFILE CHECKSUM: 20a645e6fb01703dd3827eb500a9bbed2e0fdfbf
+PODFILE CHECKSUM: 88961b32248cf1ac537dbc2251436ebd4ec4511d
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
