@@ -42,7 +42,7 @@ internal class AudioLogger {
     }
     
     private func log(_ level: LogLevel, _ items: [Any], _ separator: String, _ terminator: String) {
-        guard level >= minLevel else { return }
+        guard enabled, level >= minLevel else { return }
         
         #if DEBUG
         queue.async {

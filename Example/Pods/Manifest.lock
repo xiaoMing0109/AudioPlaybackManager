@@ -1,5 +1,5 @@
 PODS:
-  - AudioPlaybackManager (0.1.0):
+  - AudioPlaybackManager (0.3.0):
     - VIMediaCache (~> 0.4)
   - RxCocoa (6.6.0):
     - RxRelay (= 6.6.0)
@@ -36,7 +36,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/vitoziv/VIMediaCache.git
 
 SPEC CHECKSUMS:
-  AudioPlaybackManager: 6d5a30182e01a726823b39539574293a581223be
+  AudioPlaybackManager: 6ced9ee76e2d3cbb26502b412b75f5f7576544c6
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632

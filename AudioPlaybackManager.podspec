@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AudioPlaybackManager'
-  s.version          = '0.2.0'
-  s.summary          = 'A audio playback manager.'
+  s.version          = '0.3.0'
+  s.summary          = 'A audio/video playback manager.'
   s.homepage         = 'https://github.com/xiaoMing0109/AudioPlaybackManager'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'LiuMing' => 'liuming_0109@163.com' }

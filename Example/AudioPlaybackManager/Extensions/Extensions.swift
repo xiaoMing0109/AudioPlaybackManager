@@ -12,6 +12,8 @@ import UIKit
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
 
+typealias VoidHandler = () -> Void
+
 // MARK: - UIColor
 
 extension UIColor {

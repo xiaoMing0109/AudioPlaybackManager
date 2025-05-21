@@ -9,7 +9,7 @@ import Foundation
 @objcMembers
 open class Audio: NSObject {
     
-    /// Audio url.
+    /// Audio/Video url.
     open var audioURL: URL
     
     public init(audioURL: URL) {

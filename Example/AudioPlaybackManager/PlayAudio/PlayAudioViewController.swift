@@ -9,7 +9,6 @@
 import UIKit
 import AudioPlaybackManager
 import RxSwift
-import CoreMedia
 
 class PlayAudioViewController: UIViewController {
     
@@ -57,7 +56,7 @@ class PlayAudioViewController: UIViewController {
         AudioPlaybackManager.shared.activateChangePlaybackPositionCommand(true)
         
         // Log enable.
-        AudioPlaybackManager.shared.logEnabled = true
+        AudioPlaybackManager.shared.logEnabled = false
         AudioPlaybackManager.shared.logLevel = .info
         
         viewModel.playAudio(at: defaultPlayIndex)
@@ -92,6 +91,7 @@ class PlayAudioViewController: UIViewController {
     }
     
     deinit {
+        print("\(self) is deinit.")
         viewModel.stopPlay()
         AudioPlaybackManager.shared.deactivateAllRemoteCommands()
         AudioPlaybackManager.shared.setActiveSession(false, activeOptions: [.notifyOthersOnDeactivation])

@@ -1,7 +1,7 @@
 {
   "name": "AudioPlaybackManager",
-  "version": "0.1.0",
-  "summary": "A audio playback manager.",
+  "version": "0.3.0",
+  "summary": "A audio/video playback manager.",
   "homepage": "https://github.com/xiaoMing0109/AudioPlaybackManager",
   "license": {
     "type": "MIT",
@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/xiaoMing0109/AudioPlaybackManager.git",
-    "tag": "0.1.0"
+    "tag": "0.3.0"
   },
   "platforms": {
     "ios": "10.0"

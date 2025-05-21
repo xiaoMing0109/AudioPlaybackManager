@@ -16,11 +16,17 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		95D415EEF25900336164C6DC /* Pods_AudioPlaybackManager_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035F62A7D45E308D9599B6C5 /* Pods_AudioPlaybackManager_Example.framework */; };
 		BFB0336529DC25330009D5A1 /* AudioPlaybackManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */; };
-		BFD4EA3F29D58096000182BC /* PlayAudioControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA3929D58096000182BC /* PlayAudioControlView.xib */; };
+		BFBF9DA62C08268F006D0F9F /* heartRate_result.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFBF9DA52C08268F006D0F9F /* heartRate_result.mp4 */; };
+		BFBF9DB02C085005006D0F9F /* PlayVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DA92C085005006D0F9F /* PlayVideoViewController.swift */; };
+		BFBF9DB12C085005006D0F9F /* PlayAudioControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DAB2C085005006D0F9F /* PlayAudioControlView.swift */; };
+		BFBF9DB22C085005006D0F9F /* PlayAudioControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFBF9DAC2C085005006D0F9F /* PlayAudioControlView.xib */; };
+		BFBF9DB32C085005006D0F9F /* PlayAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DAD2C085005006D0F9F /* PlayAudioViewController.swift */; };
+		BFBF9DB42C085005006D0F9F /* PlayAudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DAE2C085005006D0F9F /* PlayAudioViewModel.swift */; };
+		BFBF9DB72C0851C4006D0F9F /* PlayVideoControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DB62C0851C4006D0F9F /* PlayVideoControlView.swift */; };
+		BFBF9DB92C0853CB006D0F9F /* PlayVideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DB82C0853CB006D0F9F /* PlayVideoViewModel.swift */; };
+		BFBF9DBB2C0853DF006D0F9F /* PlayVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF9DBA2C0853DF006D0F9F /* PlayVideoView.swift */; };
+		BFC5EA022D002FA9006A44A6 /* AudioPlaybackManagerSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC5EA012D002FA9006A44A6 /* AudioPlaybackManagerSwiftTests.swift */; };
 		BFD4EA4029D58096000182BC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3A29D58096000182BC /* Extensions.swift */; };
-		BFD4EA4229D58096000182BC /* PlayAudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */; };
-		BFD4EA4329D58096000182BC /* PlayAudioControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3D29D58096000182BC /* PlayAudioControlView.swift */; };
-		BFD4EA4429D58096000182BC /* PlayAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */; };
 		BFD4EA4A29D68F2F000182BC /* Song 1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4629D68F2F000182BC /* Song 1.m4a */; };
 		BFD4EA4B29D68F2F000182BC /* Song 2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4729D68F2F000182BC /* Song 2.m4a */; };
 		BFD4EA4D29D68F2F000182BC /* artwork.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BFD4EA4929D68F2F000182BC /* artwork.jpg */; };
@@ -57,11 +63,17 @@
 		92E85F8272A505800415F53E /* Pods-AudioPlaybackManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioPlaybackManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AudioPlaybackManager_Tests/Pods-AudioPlaybackManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6C4FA1B44BF60FDCC0823C5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackManagerTest.swift; sourceTree = "<group>"; };
-		BFD4EA3929D58096000182BC /* PlayAudioControlView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayAudioControlView.xib; sourceTree = "<group>"; };
+		BFBF9DA52C08268F006D0F9F /* heartRate_result.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = heartRate_result.mp4; sourceTree = "<group>"; };
+		BFBF9DA92C085005006D0F9F /* PlayVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVideoViewController.swift; sourceTree = "<group>"; };
+		BFBF9DAB2C085005006D0F9F /* PlayAudioControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioControlView.swift; sourceTree = "<group>"; };
+		BFBF9DAC2C085005006D0F9F /* PlayAudioControlView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayAudioControlView.xib; sourceTree = "<group>"; };
+		BFBF9DAD2C085005006D0F9F /* PlayAudioViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewController.swift; sourceTree = "<group>"; };
+		BFBF9DAE2C085005006D0F9F /* PlayAudioViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewModel.swift; sourceTree = "<group>"; };
+		BFBF9DB62C0851C4006D0F9F /* PlayVideoControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVideoControlView.swift; sourceTree = "<group>"; };
+		BFBF9DB82C0853CB006D0F9F /* PlayVideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVideoViewModel.swift; sourceTree = "<group>"; };
+		BFBF9DBA2C0853DF006D0F9F /* PlayVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVideoView.swift; sourceTree = "<group>"; };
+		BFC5EA012D002FA9006A44A6 /* AudioPlaybackManagerSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackManagerSwiftTests.swift; sourceTree = "<group>"; };
 		BFD4EA3A29D58096000182BC /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewModel.swift; sourceTree = "<group>"; };
-		BFD4EA3D29D58096000182BC /* PlayAudioControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioControlView.swift; sourceTree = "<group>"; };
-		BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayAudioViewController.swift; sourceTree = "<group>"; };
 		BFD4EA4629D68F2F000182BC /* Song 1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Song 1.m4a"; sourceTree = "<group>"; };
 		BFD4EA4729D68F2F000182BC /* Song 2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Song 2.m4a"; sourceTree = "<group>"; };
 		BFD4EA4929D68F2F000182BC /* artwork.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = artwork.jpg; sourceTree = "<group>"; };
@@ -124,14 +136,12 @@
 		607FACD21AFB9204008FA782 /* Example for AudioPlaybackManager */ = {
 			isa = PBXGroup;
 			children = (
-				BFD4EA4529D68F2F000182BC /* Resources */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				BFD4EA3E29D58096000182BC /* PlayAudioViewController.swift */,
-				BFD4EA3C29D58096000182BC /* PlayAudioViewModel.swift */,
-				BFD4EA3D29D58096000182BC /* PlayAudioControlView.swift */,
-				BFD4EA3929D58096000182BC /* PlayAudioControlView.xib */,
-				BFD4EA3A29D58096000182BC /* Extensions.swift */,
+				BFD4EA4529D68F2F000182BC /* Resources */,
+				BFBF9DAF2C085005006D0F9F /* PlayAudio */,
+				BFBF9DAA2C085005006D0F9F /* PlayVideo */,
+				BFBF9DB52C08501B006D0F9F /* Extensions */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -154,6 +164,7 @@
 			children = (
 				BFB0336429DC25330009D5A1 /* AudioPlaybackManagerTest.swift */,
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				BFC5EA012D002FA9006A44A6 /* AudioPlaybackManagerSwiftTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -186,9 +197,40 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BFBF9DAA2C085005006D0F9F /* PlayVideo */ = {
+			isa = PBXGroup;
+			children = (
+				BFBF9DA92C085005006D0F9F /* PlayVideoViewController.swift */,
+				BFBF9DB82C0853CB006D0F9F /* PlayVideoViewModel.swift */,
+				BFBF9DBA2C0853DF006D0F9F /* PlayVideoView.swift */,
+				BFBF9DB62C0851C4006D0F9F /* PlayVideoControlView.swift */,
+			);
+			path = PlayVideo;
+			sourceTree = "<group>";
+		};
+		BFBF9DAF2C085005006D0F9F /* PlayAudio */ = {
+			isa = PBXGroup;
+			children = (
+				BFBF9DAD2C085005006D0F9F /* PlayAudioViewController.swift */,
+				BFBF9DAE2C085005006D0F9F /* PlayAudioViewModel.swift */,
+				BFBF9DAB2C085005006D0F9F /* PlayAudioControlView.swift */,
+				BFBF9DAC2C085005006D0F9F /* PlayAudioControlView.xib */,
+			);
+			path = PlayAudio;
+			sourceTree = "<group>";
+		};
+		BFBF9DB52C08501B006D0F9F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BFD4EA3A29D58096000182BC /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		BFD4EA4529D68F2F000182BC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BFBF9DA52C08268F006D0F9F /* heartRate_result.mp4 */,
 				BFD4EA4629D68F2F000182BC /* Song 1.m4a */,
 				BFD4EA4729D68F2F000182BC /* Song 2.m4a */,
 				BFFB6ADE29D6F5440060D8D0 /* 暗里着迷.m4a */,
@@ -287,9 +329,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFBF9DA62C08268F006D0F9F /* heartRate_result.mp4 in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				BFD4EA3F29D58096000182BC /* PlayAudioControlView.xib in Resources */,
 				BFFB6ADF29D6F5440060D8D0 /* 暗里着迷.m4a in Resources */,
+				BFBF9DB22C085005006D0F9F /* PlayAudioControlView.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				BFD4EA4D29D68F2F000182BC /* artwork.jpg in Resources */,
 				BFD4EA4B29D68F2F000182BC /* Song 2.m4a in Resources */,
@@ -387,12 +430,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFBF9DBB2C0853DF006D0F9F /* PlayVideoView.swift in Sources */,
+				BFBF9DB02C085005006D0F9F /* PlayVideoViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				BFBF9DB42C085005006D0F9F /* PlayAudioViewModel.swift in Sources */,
+				BFBF9DB12C085005006D0F9F /* PlayAudioControlView.swift in Sources */,
 				BFD4EA4029D58096000182BC /* Extensions.swift in Sources */,
-				BFD4EA4229D58096000182BC /* PlayAudioViewModel.swift in Sources */,
-				BFD4EA4329D58096000182BC /* PlayAudioControlView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				BFD4EA4429D58096000182BC /* PlayAudioViewController.swift in Sources */,
+				BFBF9DB92C0853CB006D0F9F /* PlayVideoViewModel.swift in Sources */,
+				BFBF9DB72C0851C4006D0F9F /* PlayVideoControlView.swift in Sources */,
+				BFBF9DB32C085005006D0F9F /* PlayAudioViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +447,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFC5EA022D002FA9006A44A6 /* AudioPlaybackManagerSwiftTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				BFB0336529DC25330009D5A1 /* AudioPlaybackManagerTest.swift in Sources */,
 			);

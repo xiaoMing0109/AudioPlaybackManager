@@ -145,9 +145,9 @@ open class AudioPlaybackManager: NSObject {
         }
     }
     
-    // MARK: Internal Properties
+    public let player = AVPlayer()
     
-    internal let player = AVPlayer()
+    // MARK: Internal Properties
     
     internal private(set) var playerItem: AVPlayerItem? {
         willSet {

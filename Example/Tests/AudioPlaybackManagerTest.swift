@@ -13,6 +13,7 @@ import AVFoundation
 final class AudioPlaybackManagerTest: XCTestCase {
     
     var sut: AudioPlaybackManager!
+    var audio: Audio?
     
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -20,6 +21,7 @@ final class AudioPlaybackManagerTest: XCTestCase {
     }
     
     override func tearDownWithError() throws {
+        sut.removeAllDelegates()
         sut = nil
         try super.tearDownWithError()
     }
@@ -378,5 +380,49 @@ extension AudioPlaybackManagerTest {
         }
 
         wait(for: [notificationPromise], timeout: 1)
+    }
+}
+
+// MARK: - Test Delegates
+
+class SpyDelegate: AudioPlaybackManagerDelegate {
+    
+    // Async test code needs to fulfill the XCTestExpecation used for the test
+    // when all the async operations have been completed. For this reason we need
+    // to store a reference to the expectation
+    var asyncExpectation: XCTestExpectation?
+    
+    func audioPlaybackManagerRreadyToPlay(_ manager: AudioPlaybackManager) {
+        guard let expectation = asyncExpectation else {
+            XCTFail("SpyDelegate was not setup correctly. Missing XCTExpectation reference")
+            return
+        }
+        
+        let duration = manager.duration
+        guard (156.0 ..< 157.0) ~= duration else {
+            XCTFail()
+            return
+        }
+        
+        expectation.fulfill()
+    }
+}
+
+extension AudioPlaybackManagerTest {
+    
+    func test_audioPlaybackManagerRreadyToPlay() {
+        // given
+        let spyDelegate = SpyDelegate()
+        sut.addDelegate(spyDelegate)
+        
+        let expectation = XCTestExpectation(description: "AudioPlaybackManager calls the delegate as the result of an async method completion")
+        spyDelegate.asyncExpectation = expectation
+        
+        // when
+        let audio = disable_generateLocalItem()
+        sut.setupItem(audio, beginTime: 0)
+        
+        // then
+        wait(for: [expectation], timeout: 1)
     }
 }
